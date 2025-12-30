@@ -10,14 +10,14 @@ export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return <HomeContent />;
+  return <HomeContent locale={locale} />;
 }
 
-function HomeContent() {
+function HomeContent({ locale }: { locale: string }) {
   const t = useTranslations();
 
   return (
-    <main className="flex-1">
+    <>
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         {/* Background gradient */}
@@ -139,6 +139,6 @@ function HomeContent() {
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }
