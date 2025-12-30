@@ -1,0 +1,75 @@
+{
+  "app": {
+    "name": "DSA Visualizer",
+    "tagline": "Learn Data Structures & Algorithms Visually",
+    "description": "Interactive visualizations to help you master DSA concepts"
+  },
+  "nav": {
+    "home": "Home",
+    "topics": "Topics",
+    "visualize": "Visualize",
+    "learn": "Learn",
+    "practice": "Practice"
+  },
+  "topics": {
+    "sorting": "Sorting",
+    "searching": "Searching",
+    "graphs": "Graphs",
+    "trees": "Trees",
+    "stacks": "Stacks & Queues",
+    "linkedLists": "Linked Lists",
+    "heaps": "Heaps",
+    "dynamicProgramming": "Dynamic Programming"
+  },
+  "player": {
+    "play": "Play",
+    "pause": "Pause",
+    "stepForward": "Step Forward",
+    "stepBack": "Step Back",
+    "reset": "Reset",
+    "speed": "Speed",
+    "slow": "Slow",
+    "normal": "Normal",
+    "fast": "Fast"
+  },
+  "input": {
+    "customInput": "Custom Input",
+    "generate": "Generate",
+    "placeholder": "Enter values...",
+    "validate": "Validate",
+    "clear": "Clear",
+    "example": "Example"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "close": "Close",
+    "settings": "Settings",
+    "theme": "Theme",
+    "language": "Language",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode"
+  },
+  "home": {
+    "hero": {
+      "title": "Master DSA Through Visualization",
+      "subtitle": "Interactive step-by-step animations to help you understand algorithms intuitively",
+      "cta": "Start Learning"
+    },
+    "features": {
+      "interactive": {
+        "title": "Interactive Animations",
+        "description": "Step through algorithms at your own pace with play, pause, and seek controls"
+      },
+      "customInput": {
+        "title": "Custom Inputs",
+        "description": "Test with your own data or generate random inputs to see how algorithms behave"
+      },
+      "multiLanguage": {
+        "title": "Multiple Languages",
+        "description": "Learn in your preferred language with full i18n support"
+      }
+    }
+  }
+}
