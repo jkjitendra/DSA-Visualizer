@@ -62,6 +62,10 @@ export const bubbleSort: IAlgorithm<ArrayInput> = {
       0
     );
     yield createEvent.highlight([0, 1]);
+    yield createEvent.pointer(
+      [],
+      [{ name: 'n', value: n }]
+    );
 
     for (let i = 0; i < n - 1; i++) {
       yield createEvent.message(
@@ -70,15 +74,37 @@ export const bubbleSort: IAlgorithm<ArrayInput> = {
         2
       );
       yield createEvent.highlight([2]);
+      yield createEvent.pointer(
+        [{ index: n - 1 - i, label: 'boundary', color: 'var(--color-accent-sorted)' }],
+        [
+          { name: 'i', value: i },
+          { name: 'n', value: n },
+        ]
+      );
 
       let swapped = false;
 
       for (let j = 0; j < n - i - 1; j++) {
         yield createEvent.highlight([3]);
 
+        // Show pointers for j and j+1
+        yield createEvent.pointer(
+          [
+            { index: j, label: 'j', color: 'var(--color-accent-compare)' },
+            { index: j + 1, label: 'j+1', color: 'var(--color-accent-compare)' },
+          ],
+          [
+            { name: 'i', value: i },
+            { name: 'j', value: j },
+            { name: 'arr[j]', value: arr[j], highlight: true },
+            { name: 'arr[j+1]', value: arr[j + 1], highlight: true },
+          ],
+          `arr[${j}] > arr[${j + 1}] → ${arr[j]} > ${arr[j + 1]}`
+        );
+
         // Compare adjacent elements
         yield createEvent.message(
-          `Comparing ${arr[j]} and ${arr[j + 1]}`,
+          `Comparing arr[${j}]=${arr[j]} and arr[${j + 1}]=${arr[j + 1]}`,
           'explanation',
           4
         );
@@ -88,6 +114,21 @@ export const bubbleSort: IAlgorithm<ArrayInput> = {
         yield createEvent.compare([j, j + 1], compareResult);
 
         if (arr[j] > arr[j + 1]) {
+          // Update expression to show result
+          yield createEvent.pointer(
+            [
+              { index: j, label: 'j', color: 'var(--color-accent-swap)' },
+              { index: j + 1, label: 'j+1', color: 'var(--color-accent-swap)' },
+            ],
+            [
+              { name: 'i', value: i },
+              { name: 'j', value: j },
+              { name: 'arr[j]', value: arr[j], highlight: true },
+              { name: 'arr[j+1]', value: arr[j + 1], highlight: true },
+            ],
+            `${arr[j]} > ${arr[j + 1]} = true → SWAP!`
+          );
+
           // Swap elements
           yield createEvent.message(
             `${arr[j]} > ${arr[j + 1]}, swapping`,
@@ -103,6 +144,19 @@ export const bubbleSort: IAlgorithm<ArrayInput> = {
           yield createEvent.swap([j, j + 1]);
           swapped = true;
         } else {
+          yield createEvent.pointer(
+            [
+              { index: j, label: 'j', color: 'var(--color-accent-compare)' },
+              { index: j + 1, label: 'j+1', color: 'var(--color-accent-compare)' },
+            ],
+            [
+              { name: 'i', value: i },
+              { name: 'j', value: j },
+              { name: 'arr[j]', value: arr[j] },
+              { name: 'arr[j+1]', value: arr[j + 1] },
+            ],
+            `${arr[j]} > ${arr[j + 1]} = false → no swap`
+          );
           yield createEvent.message(
             `${arr[j]} ≤ ${arr[j + 1]}, no swap needed`,
             'explanation'
@@ -134,6 +188,7 @@ export const bubbleSort: IAlgorithm<ArrayInput> = {
     // Mark first element as sorted (if not already)
     yield createEvent.mark([0], 'sorted');
 
+    yield createEvent.pointer([], []);
     yield createEvent.message(
       'Bubble Sort complete!',
       'info',
@@ -142,3 +197,4 @@ export const bubbleSort: IAlgorithm<ArrayInput> = {
     yield createEvent.highlight([6]);
   },
 };
+

@@ -16,7 +16,8 @@ export type AlgoEventType =
   | 'push'
   | 'pop'
   | 'enqueue'
-  | 'dequeue';
+  | 'dequeue'
+  | 'pointer';
 
 export interface BaseEvent {
   type: AlgoEventType;
@@ -99,6 +100,13 @@ export interface DequeueEvent extends BaseEvent {
   value: number | string;
 }
 
+export interface PointerEvent extends BaseEvent {
+  type: 'pointer';
+  pointers: { index: number; label: string; color?: string }[];
+  variables: { name: string; value: string | number; highlight?: boolean }[];
+  expression?: string;
+}
+
 export type AlgoEvent =
   | CompareEvent
   | SwapEvent
@@ -112,7 +120,8 @@ export type AlgoEvent =
   | PushEvent
   | PopEvent
   | EnqueueEvent
-  | DequeueEvent;
+  | DequeueEvent
+  | PointerEvent;
 
 /**
  * Helper functions to create events
@@ -182,5 +191,16 @@ export const createEvent = {
     type: 'pop',
     value,
     structure,
+  }),
+
+  pointer: (
+    pointers: { index: number; label: string; color?: string }[],
+    variables: { name: string; value: string | number; highlight?: boolean }[],
+    expression?: string
+  ): PointerEvent => ({
+    type: 'pointer',
+    pointers,
+    variables,
+    expression,
   }),
 };
