@@ -14,6 +14,7 @@ const navItems = [
   { key: "visualize", href: "/visualize" },
   { key: "learn", href: "/learn" },
   { key: "practice", href: "/practice" },
+  { key: "playground", href: "/playground" },
 ] as const;
 
 export function Header() {
@@ -51,8 +52,8 @@ export function Header() {
                   key={item.key}
                   href={`/${locale}${item.href}`}
                   className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${active
-                      ? "text-[var(--color-primary-600)] dark:text-[var(--color-primary-400)] bg-[var(--color-primary-500)]/10 border border-[var(--color-primary-500)]/20"
-                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                    ? "text-[var(--color-primary-600)] dark:text-[var(--color-primary-400)] bg-[var(--color-primary-500)]/10 border border-[var(--color-primary-500)]/20"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                     }`}
                 >
                   {t(item.key)}
@@ -94,8 +95,8 @@ export function Header() {
                     key={item.key}
                     href={`/${locale}${item.href}`}
                     className={`px-4 py-3 text-base font-medium rounded-lg transition-all duration-200 ${active
-                        ? "text-[var(--color-primary-600)] dark:text-[var(--color-primary-400)] bg-[var(--color-primary-500)]/10 border border-[var(--color-primary-500)]/20"
-                        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
+                      ? "text-[var(--color-primary-600)] dark:text-[var(--color-primary-400)] bg-[var(--color-primary-500)]/10 border border-[var(--color-primary-500)]/20"
+                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                       }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >

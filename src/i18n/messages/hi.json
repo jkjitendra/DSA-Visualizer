@@ -9,17 +9,24 @@
     "topics": "विषय",
     "visualize": "विज़ुअलाइज़",
     "learn": "सीखें",
-    "practice": "अभ्यास"
+    "practice": "अभ्यास",
+    "playground": "प्लेग्राउंड"
   },
   "topics": {
+    "arrays": "एरे",
+    "strings": "स्ट्रिंग्स",
     "sorting": "सॉर्टिंग",
     "searching": "सर्चिंग",
-    "graphs": "ग्राफ",
-    "trees": "ट्री",
-    "stacks": "स्टैक और क्यू",
+    "stacks": "स्टैक",
+    "queues": "क्यू",
     "linkedLists": "लिंक्ड लिस्ट",
+    "recursion": "रिकर्शन",
+    "trees": "ट्री",
     "heaps": "हीप",
-    "dynamicProgramming": "डायनामिक प्रोग्रामिंग"
+    "hashing": "हैशिंग",
+    "graphs": "ग्राफ",
+    "dynamicProgramming": "डायनामिक प्रोग्रामिंग",
+    "greedy": "ग्रीडी एल्गोरिदम"
   },
   "player": {
     "play": "चलाएं",

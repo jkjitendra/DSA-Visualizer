@@ -37,7 +37,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, ArrowDownUp, BarChart3 } from "lucide-react";
 
-const defaultArray = [64, 34, 25, 12, 22, 11, 90, 45];
+const defaultArray = [64, 34, 25, 12, 22, 11, 90];
 
 // Algorithm-specific default arrays for better visualization
 const algorithmDefaultArrays: Record<string, number[]> = {

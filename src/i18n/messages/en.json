@@ -9,17 +9,24 @@
     "topics": "Topics",
     "visualize": "Visualize",
     "learn": "Learn",
-    "practice": "Practice"
+    "practice": "Practice",
+    "playground": "Playground"
   },
   "topics": {
+    "arrays": "Arrays",
+    "strings": "Strings",
     "sorting": "Sorting",
     "searching": "Searching",
-    "graphs": "Graphs",
-    "trees": "Trees",
-    "stacks": "Stacks & Queues",
+    "stacks": "Stacks",
+    "queues": "Queues",
     "linkedLists": "Linked Lists",
+    "recursion": "Recursion",
+    "trees": "Trees",
     "heaps": "Heaps",
-    "dynamicProgramming": "Dynamic Programming"
+    "hashing": "Hashing",
+    "graphs": "Graphs",
+    "dynamicProgramming": "Dynamic Programming",
+    "greedy": "Greedy Algorithms"
   },
   "player": {
     "play": "Play",
