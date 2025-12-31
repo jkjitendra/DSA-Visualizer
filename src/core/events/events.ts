@@ -17,7 +17,89 @@ export type AlgoEventType =
   | 'pop'
   | 'enqueue'
   | 'dequeue'
-  | 'pointer';
+  | 'pointer'
+  | 'auxiliary';
+
+/**
+ * Auxiliary state for algorithm-specific visualizations
+ */
+export interface BucketData {
+  id: number;
+  label: string;
+  values: number[];
+  highlight?: boolean;
+}
+
+export interface HeapNode {
+  value: number;
+  index: number;
+  highlight?: boolean;
+  isRemoving?: boolean;
+  swapWith?: number;  // Value being swapped with
+  reason?: string;    // Why swap is happening
+  left?: number;
+  right?: number;
+}
+
+export interface CountArrayItem {
+  index: number;
+  count: number;
+  highlight?: boolean;
+}
+
+export interface MergeData {
+  leftArr: number[];
+  rightArr: number[];
+  leftIdx: number;
+  rightIdx: number;
+  leftStart: number;
+  rightStart: number;
+}
+
+export interface GapData {
+  gap: number;
+  gaps: number[];  // Sequence so far
+  currentIdx: number;
+  comparingIdx: number;
+}
+
+export interface PartitionData {
+  low: number;
+  high: number;
+  pivotIdx: number;
+  pivotValue: number;
+  i: number;  // Boundary of elements less than pivot
+}
+
+export interface RunData {
+  runs: { start: number; end: number }[];
+  currentRun?: number;
+  phase: 'detecting' | 'sorting' | 'merging';
+}
+
+export interface ModeData {
+  mode: 'quicksort' | 'heapsort' | 'insertion';
+  depth: number;
+  maxDepth: number;
+  range: { lo: number; hi: number };
+}
+
+export interface AuxiliaryState {
+  type: 'buckets' | 'heap' | 'count' | 'merge' | 'insertion' | 'gap' | 'partition' | 'runs' | 'mode';
+  phase?: string;
+  buckets?: BucketData[];
+  heap?: { nodes: HeapNode[]; heapSize: number };
+  countArray?: CountArrayItem[];
+  outputArray?: number[];
+  sortedPortion?: number;
+  currentDigit?: number;
+  maxDigit?: number;
+  mergeData?: MergeData;
+  gapData?: GapData;
+  partitionData?: PartitionData;
+  runData?: RunData;
+  modeData?: ModeData;
+}
 
 export interface BaseEvent {
   type: AlgoEventType;
@@ -107,6 +189,11 @@ export interface PointerEvent extends BaseEvent {
   expression?: string;
 }
 
+export interface AuxiliaryEvent extends BaseEvent {
+  type: 'auxiliary';
+  state: AuxiliaryState;
+}
+
 export type AlgoEvent =
   | CompareEvent
   | SwapEvent
@@ -121,7 +208,8 @@ export type AlgoEvent =
   | PopEvent
   | EnqueueEvent
   | DequeueEvent
-  | PointerEvent;
+  | PointerEvent
+  | AuxiliaryEvent;
 
 /**
  * Helper functions to create events
@@ -202,5 +290,10 @@ export const createEvent = {
     pointers,
     variables,
     expression,
+  }),
+
+  auxiliary: (state: AuxiliaryState): AuxiliaryEvent => ({
+    type: 'auxiliary',
+    state,
   }),
 };
