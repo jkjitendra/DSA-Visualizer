@@ -17,6 +17,24 @@ export const speedValues: Record<SpeedPreset, number> = {
 };
 
 /**
+ * Pointer to show above bars (i, j, etc.)
+ */
+export interface VariablePointer {
+  index: number;
+  label: string;
+  color?: string;
+}
+
+/**
+ * Variable values to display in panel
+ */
+export interface VariableValue {
+  name: string;
+  value: string | number;
+  highlight?: boolean;
+}
+
+/**
  * Snapshot of algorithm state at a given step
  */
 export interface AlgorithmSnapshot {
@@ -29,6 +47,10 @@ export interface AlgorithmSnapshot {
     comparisons: number;
     swaps: number;
   };
+  // New: pointers and variables
+  pointers: VariablePointer[];
+  variables: VariableValue[];
+  expression?: string; // e.g., "arr[1] > arr[2] → 34 > 25 = true"
 }
 
 /**
@@ -67,6 +89,7 @@ export interface PlayerActions {
 
   // Speed control
   setSpeed: (preset: SpeedPreset) => void;
+  setSpeedMs: (ms: number) => void;
 
   // Algorithm setup
   loadAlgorithm: (algorithmId: string, input: number[]) => void;

@@ -22,6 +22,9 @@ const createInitialSnapshot = (inputArray: number[]): AlgorithmSnapshot => ({
     comparisons: 0,
     swaps: 0,
   },
+  pointers: [],
+  variables: [],
+  expression: undefined,
 });
 
 /**
@@ -39,6 +42,8 @@ const applyEvent = (
     markedIndices: new Map(prevSnapshot.markedIndices),
     highlightedLines: [...prevSnapshot.highlightedLines],
     metrics: { ...prevSnapshot.metrics },
+    pointers: [...prevSnapshot.pointers],
+    variables: [...prevSnapshot.variables],
   };
 
   switch (event.type) {
@@ -85,6 +90,14 @@ const applyEvent = (
 
     case 'set':
       newSnapshot.arrayState[event.index] = event.value as number;
+      break;
+
+    case 'pointer':
+      newSnapshot.pointers = event.pointers;
+      newSnapshot.variables = event.variables;
+      if (event.expression !== undefined) {
+        newSnapshot.expression = event.expression;
+      }
       break;
 
     default:
@@ -246,6 +259,23 @@ export const usePlayerStore = create<PlayerStore>((set, get) => {
       set({
         speed: newSpeed,
         speedPreset: preset,
+      });
+
+      // If playing, restart with new speed
+      if (state.status === 'playing') {
+        clearPlayInterval();
+        playIntervalId = setInterval(advanceStep, newSpeed);
+      }
+    },
+
+    setSpeedMs: (ms: number) => {
+      const state = get();
+      // Clamp speed between 100ms and 2000ms
+      const newSpeed = Math.max(100, Math.min(2000, ms));
+
+      set({
+        speed: newSpeed,
+        speedPreset: 'normal', // Reset preset when using custom speed
       });
 
       // If playing, restart with new speed

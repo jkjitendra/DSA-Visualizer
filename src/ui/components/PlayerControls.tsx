@@ -1,8 +1,10 @@
 "use client";
 
-import { usePlayerStore, SpeedPreset } from "@/core/player";
+import { useState } from "react";
+import { usePlayerStore } from "@/core/player";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
 import {
   Play,
   Pause,
@@ -12,43 +14,90 @@ import {
   Gauge,
 } from "lucide-react";
 
-const speedPresets: { value: SpeedPreset; label: string }[] = [
-  { value: "slow", label: "0.5x" },
-  { value: "normal", label: "1x" },
-  { value: "fast", label: "2x" },
-];
-
 export function PlayerControls() {
   const {
     status,
     currentStep,
-    speedPreset,
+    speed,
     play,
     pause,
     step,
     stepBack,
     reset,
     seek,
-    setSpeed,
-    getProgress,
+    setSpeedMs,
     getTotalSteps,
   } = usePlayerStore();
 
+  const [editingStep, setEditingStep] = useState(false);
+  const [stepInput, setStepInput] = useState("");
+
   const totalSteps = getTotalSteps();
-  const progress = getProgress();
   const isPlaying = status === "playing";
   const isFinished = status === "finished";
   const canStep = currentStep < totalSteps;
   const canStepBack = currentStep > 0;
 
+  const handleStepInputSubmit = () => {
+    const stepNum = parseInt(stepInput, 10);
+    if (!isNaN(stepNum) && stepNum >= 0 && stepNum <= totalSteps) {
+      seek(stepNum);
+    }
+    setEditingStep(false);
+    setStepInput("");
+  };
+
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-3 sm:space-y-4">
       {/* Timeline slider */}
       <div className="space-y-2">
-        <div className="flex items-center justify-between text-sm text-[var(--text-secondary)]">
-          <span>Step {currentStep}</span>
-          <span>Total: {totalSteps}</span>
+        <div className="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm text-[var(--text-secondary)]">
+          {/* Editable step */}
+          {editingStep ? (
+            <div className="flex items-center gap-1">
+              <span className="text-[10px] sm:text-sm">Step</span>
+              <Input
+                type="number"
+                value={stepInput}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStepInput(e.target.value)}
+                onBlur={handleStepInputSubmit}
+                onKeyDown={(e: React.KeyboardEvent) => e.key === "Enter" && handleStepInputSubmit()}
+                className="w-12 sm:w-16 h-5 sm:h-6 px-1 text-center text-xs sm:text-sm"
+                min={0}
+                max={totalSteps}
+                autoFocus
+              />
+              <span className="text-[10px] sm:text-sm">/ {totalSteps}</span>
+            </div>
+          ) : (
+            <button
+              onClick={() => {
+                setStepInput(currentStep.toString());
+                setEditingStep(true);
+              }}
+              className="hover:text-[var(--color-primary-400)] transition-colors cursor-pointer text-[10px] sm:text-sm whitespace-nowrap"
+              title="Click to jump to step"
+            >
+              Step {currentStep} / {totalSteps}
+            </button>
+          )}
+
+          {/* Speed slider */}
+          <div className="flex items-center gap-1 sm:gap-2">
+            <Gauge className="h-3 w-3 sm:h-4 sm:w-4" />
+            <Slider
+              value={[speed]}
+              min={100}
+              max={2000}
+              step={50}
+              onValueChange={([value]) => setSpeedMs(value)}
+              className="w-16 sm:w-24 cursor-pointer"
+            />
+            <span className="w-10 sm:w-12 text-[10px] sm:text-xs">{speed}ms</span>
+          </div>
         </div>
+
+        {/* Timeline */}
         <Slider
           value={[currentStep]}
           min={0}
@@ -68,6 +117,7 @@ export function PlayerControls() {
           onClick={reset}
           disabled={currentStep === 0 && status === "idle"}
           className="h-10 w-10"
+          title="Reset"
         >
           <RotateCcw className="h-4 w-4" />
         </Button>
@@ -79,6 +129,7 @@ export function PlayerControls() {
           onClick={stepBack}
           disabled={!canStepBack}
           className="h-10 w-10"
+          title="Step Back"
         >
           <SkipBack className="h-4 w-4" />
         </Button>
@@ -89,6 +140,7 @@ export function PlayerControls() {
           onClick={isPlaying ? pause : play}
           disabled={isFinished && currentStep >= totalSteps}
           className="h-12 w-12 rounded-full bg-gradient-to-br from-[var(--color-primary-500)] to-[var(--color-secondary-500)] hover:from-[var(--color-primary-600)] hover:to-[var(--color-secondary-600)]"
+          title={isPlaying ? "Pause" : "Play"}
         >
           {isPlaying ? (
             <Pause className="h-5 w-5 text-white" />
@@ -104,28 +156,10 @@ export function PlayerControls() {
           onClick={step}
           disabled={!canStep}
           className="h-10 w-10"
+          title="Step Forward"
         >
           <SkipForward className="h-4 w-4" />
         </Button>
-
-        {/* Speed selector */}
-        <div className="flex items-center gap-1 ml-2 p-1 rounded-lg bg-[var(--bg-tertiary)]">
-          <Gauge className="h-4 w-4 text-[var(--text-secondary)] ml-1" />
-          {speedPresets.map((preset) => (
-            <Button
-              key={preset.value}
-              variant="ghost"
-              size="sm"
-              onClick={() => setSpeed(preset.value)}
-              className={`h-8 px-2 text-xs ${speedPreset === preset.value
-                ? "bg-[var(--color-primary-500)] text-white hover:bg-[var(--color-primary-600)]"
-                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                }`}
-            >
-              {preset.label}
-            </Button>
-          ))}
-        </div>
       </div>
 
       {/* Status indicator */}
@@ -152,3 +186,4 @@ export function PlayerControls() {
     </div>
   );
 }
+

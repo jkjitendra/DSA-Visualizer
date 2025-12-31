@@ -1,10 +1,12 @@
 "use client";
 
 import { useMemo } from "react";
+import { VariablePointer } from "@/core/player/types";
 
 interface ArrayBarsProps {
   values: number[];
   markedIndices: Map<number, string>;
+  pointers?: VariablePointer[];
   maxValue?: number;
 }
 
@@ -40,32 +42,42 @@ const defaultColor = {
   border: "var(--color-primary-500)",
 };
 
-export function ArrayBars({ values, markedIndices, maxValue }: ArrayBarsProps) {
+export function ArrayBars({ values, markedIndices, pointers = [], maxValue }: ArrayBarsProps) {
   const max = maxValue ?? Math.max(...values, 1);
   const barWidth = Math.max(100 / values.length - 1, 2);
-  const gap = Math.min(1, 10 / values.length);
+
+  // Create a map of index -> pointer labels
+  const pointerMap = useMemo(() => {
+    const map = new Map<number, VariablePointer[]>();
+    pointers.forEach((pointer) => {
+      const existing = map.get(pointer.index) || [];
+      existing.push(pointer);
+      map.set(pointer.index, existing);
+    });
+    return map;
+  }, [pointers]);
 
   const bars = useMemo(() => {
     return values.map((value, index) => {
       const height = (value / max) * 100;
       const markType = markedIndices.get(index);
       const colors = markType ? markColors[markType] || defaultColor : defaultColor;
-      const left = index * (barWidth + gap);
+      const indexPointers = pointerMap.get(index) || [];
 
       return {
         index,
         value,
         height,
-        left,
         colors,
         markType,
+        pointers: indexPointers,
       };
     });
-  }, [values, markedIndices, max, barWidth, gap]);
+  }, [values, markedIndices, max, pointerMap]);
 
   return (
-    <div className="relative w-full h-full min-h-[200px] p-4 pb-8">
-      <div className="relative w-full h-full flex items-end justify-center gap-[2px]">
+    <div className="relative w-full h-full min-h-[200px] p-4 pt-10 pb-8">
+      <div className="relative w-full h-full flex items-end justify-center gap-1">
         {bars.map((bar) => (
           <div
             key={bar.index}
@@ -76,6 +88,34 @@ export function ArrayBars({ values, markedIndices, maxValue }: ArrayBarsProps) {
               minHeight: "20px",
             }}
           >
+            {/* Pointer labels above bar */}
+            {bar.pointers.length > 0 && (
+              <div className="absolute -top-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-0.5">
+                {bar.pointers.map((pointer, idx) => (
+                  <div
+                    key={`${pointer.label}-${idx}`}
+                    className="flex flex-col items-center"
+                  >
+                    <span
+                      className="text-xs font-bold px-1.5 py-0.5 rounded whitespace-nowrap"
+                      style={{
+                        color: pointer.color || "var(--color-primary-400)",
+                        backgroundColor: `color-mix(in srgb, ${pointer.color || "var(--color-primary-400)"} 20%, transparent)`,
+                      }}
+                    >
+                      {pointer.label}
+                    </span>
+                    <span
+                      className="text-lg leading-none"
+                      style={{ color: pointer.color || "var(--color-primary-400)" }}
+                    >
+                      ↓
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
             {/* Bar */}
             <div
               className="w-full h-full rounded-t-sm transition-all duration-200"
@@ -102,3 +142,4 @@ export function ArrayBars({ values, markedIndices, maxValue }: ArrayBarsProps) {
     </div>
   );
 }
+
