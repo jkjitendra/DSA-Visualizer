@@ -15,6 +15,11 @@ import { bucketSort } from './sorting/bucketSort';
 import { pigeonholeSort } from './sorting/pigeonholeSort';
 import { timSort } from './sorting/timSort';
 import { introSort } from './sorting/introSort';
+// Arrays algorithms
+import { arrayOperations } from './arrays/arrayOperations';
+import { twoPointers } from './arrays/twoPointers';
+import { slidingWindow } from './arrays/slidingWindow';
+import { prefixSum } from './arrays/prefixSum';
 
 /**
  * Registry of all available algorithms
@@ -62,7 +67,15 @@ export function getAlgorithmsByCategory(category: string): AlgorithmMeta[] {
   return getAllAlgorithms().filter((algo) => algo.category === category);
 }
 
-// Register built-in algorithms (in learning order)
+// ============ ARRAYS ============
+// Tier 1: Basic Operations
+registerAlgorithm(arrayOperations);
+// Tier 2: Patterns
+registerAlgorithm(twoPointers);
+registerAlgorithm(slidingWindow);
+registerAlgorithm(prefixSum);
+
+// ============ SORTING ============
 // Tier 1: Fundamentals
 registerAlgorithm(bubbleSort);
 registerAlgorithm(selectionSort);
@@ -83,3 +96,4 @@ registerAlgorithm(countingSort);
 registerAlgorithm(radixSort);
 registerAlgorithm(bucketSort);
 registerAlgorithm(pigeonholeSort);
+
