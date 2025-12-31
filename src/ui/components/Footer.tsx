@@ -19,7 +19,7 @@ export function Footer() {
           {/* Links */}
           <div className="flex items-center gap-4">
             <Link
-              href="https://github.com"
+              href="https://github.com/jkjitendra/dsa-visualizer"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-200"

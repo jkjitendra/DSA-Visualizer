@@ -30,7 +30,12 @@
     "speed": "Speed",
     "slow": "Slow",
     "normal": "Normal",
-    "fast": "Fast"
+    "fast": "Fast",
+    "step": "Step",
+    "total": "Total",
+    "playing": "Playing",
+    "finished": "Finished",
+    "ready": "Ready"
   },
   "input": {
     "customInput": "Custom Input",
@@ -38,7 +43,25 @@
     "placeholder": "Enter values...",
     "validate": "Validate",
     "clear": "Clear",
-    "example": "Example"
+    "example": "Example",
+    "inputArray": "Input Array",
+    "random": "Random",
+    "applyAndRun": "Apply & Run",
+    "elements": "elements"
+  },
+  "visualizer": {
+    "subtitle": "Select an algorithm and watch it come to life with step-by-step animations",
+    "selectAlgorithm": "Select Algorithm",
+    "comparing": "Comparing",
+    "swapping": "Swapping",
+    "sorted": "Sorted",
+    "comparisons": "Comparisons",
+    "swaps": "Swaps",
+    "complexity": "Complexity",
+    "timeBest": "Time (Best)",
+    "timeAvg": "Time (Avg)",
+    "timeWorst": "Time (Worst)",
+    "space": "Space"
   },
   "common": {
     "loading": "Loading...",

@@ -30,7 +30,12 @@
     "speed": "गति",
     "slow": "धीमा",
     "normal": "सामान्य",
-    "fast": "तेज़"
+    "fast": "तेज़",
+    "step": "चरण",
+    "total": "कुल",
+    "playing": "चल रहा है",
+    "finished": "पूर्ण",
+    "ready": "तैयार"
   },
   "input": {
     "customInput": "कस्टम इनपुट",
@@ -38,7 +43,25 @@
     "placeholder": "मान दर्ज करें...",
     "validate": "मान्य करें",
     "clear": "साफ़ करें",
-    "example": "उदाहरण"
+    "example": "उदाहरण",
+    "inputArray": "इनपुट एरे",
+    "random": "रैंडम",
+    "applyAndRun": "लागू करें और चलाएं",
+    "elements": "तत्व"
+  },
+  "visualizer": {
+    "subtitle": "एक एल्गोरिदम चुनें और इसे स्टेप-बाय-स्टेप एनिमेशन के साथ जीवंत होते देखें",
+    "selectAlgorithm": "एल्गोरिदम चुनें",
+    "comparing": "तुलना",
+    "swapping": "स्वैप",
+    "sorted": "क्रमबद्ध",
+    "comparisons": "तुलनाएं",
+    "swaps": "स्वैप",
+    "complexity": "जटिलता",
+    "timeBest": "समय (सर्वश्रेष्ठ)",
+    "timeAvg": "समय (औसत)",
+    "timeWorst": "समय (सबसे खराब)",
+    "space": "स्पेस"
   },
   "common": {
     "loading": "लोड हो रहा है...",
