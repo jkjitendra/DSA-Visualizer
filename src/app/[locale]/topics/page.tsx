@@ -96,7 +96,7 @@ function TopicsContent({ locale }: { locale: string }) {
           return (
             <Link
               key={topic.key}
-              href={`/${locale}/visualize?topic=${topic.key}`}
+              href={`/${locale}/topics/${topic.key}`}
               className="group relative overflow-hidden rounded-2xl border border-[var(--border-primary)] bg-[var(--bg-card)] hover:border-transparent transition-all duration-300 hover:shadow-xl"
             >
               {/* Gradient overlay on hover */}

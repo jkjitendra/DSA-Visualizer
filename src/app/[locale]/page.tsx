@@ -39,7 +39,7 @@ function HomeContent({ locale }: { locale: string }) {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up" style={{ animationDelay: "200ms" }}>
               <Link
-                href="/visualize"
+                href={`/${locale}/visualize`}
                 className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-gradient-to-r from-[var(--color-primary-500)] to-[var(--color-secondary-500)] rounded-xl hover:from-[var(--color-primary-600)] hover:to-[var(--color-secondary-600)] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
               >
                 {t("home.hero.cta")}
@@ -48,7 +48,7 @@ function HomeContent({ locale }: { locale: string }) {
                 </svg>
               </Link>
               <Link
-                href="/topics"
+                href={`/${locale}/topics`}
                 className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/20 transition-all duration-300 border border-white/20"
               >
                 {t("nav.topics")}
@@ -126,7 +126,7 @@ function HomeContent({ locale }: { locale: string }) {
             ].map((topic) => (
               <Link
                 key={topic.key}
-                href={`/topics/${topic.key}`}
+                href={`/${locale}/topics/${topic.key}`}
                 className="group relative p-6 rounded-2xl bg-gradient-to-br overflow-hidden hover:scale-105 transition-all duration-300"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${topic.color} opacity-90`} />
