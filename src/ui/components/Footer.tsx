@@ -12,8 +12,6 @@ export function Footer() {
           {/* Copyright */}
           <div className="flex items-center gap-1 text-sm text-[var(--text-secondary)]">
             <span>© {new Date().getFullYear()} {t("name")}.</span>
-            <span className="hidden sm:inline">Made with</span>
-            <Heart className="h-4 w-4 text-red-500 fill-red-500 hidden sm:inline" />
           </div>
 
           {/* Links */}
