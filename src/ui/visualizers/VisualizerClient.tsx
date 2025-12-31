@@ -28,6 +28,11 @@ import { bucketSortInfo } from "@/core/algorithms/sorting/bucketSortInfo";
 import { pigeonholeSortInfo } from "@/core/algorithms/sorting/pigeonholeSortInfo";
 import { timSortInfo } from "@/core/algorithms/sorting/timSortInfo";
 import { introSortInfo } from "@/core/algorithms/sorting/introSortInfo";
+// Arrays algorithm info
+import { arrayOperationsInfo } from "@/core/algorithms/arrays/arrayOperationsInfo";
+import { twoPointersInfo } from "@/core/algorithms/arrays/twoPointersInfo";
+import { slidingWindowInfo } from "@/core/algorithms/arrays/slidingWindowInfo";
+import { prefixSumInfo } from "@/core/algorithms/arrays/prefixSumInfo";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -41,6 +46,12 @@ const defaultArray = [64, 34, 25, 12, 22, 11, 90];
 
 // Algorithm-specific default arrays for better visualization
 const algorithmDefaultArrays: Record<string, number[]> = {
+  // Arrays topic
+  "array-operations": [5, 12, 8, 3, 15, 7, 1, 10],
+  "two-pointers": [1, 2, 3, 4, 5, 6, 7, 8, 9],  // Sorted for two-pointers
+  "sliding-window": [2, 1, 5, 1, 3, 2, 8, 4, 6],
+  "prefix-sum": [3, 1, 4, 1, 5, 9, 2, 6],
+  // Sorting topic
   "counting-sort": [5, 3, 8, 3, 9, 1, 0, 4, 7, 2],
   "radix-sort": [27, 14, 6, 37, 5, 30, 16, 42],
   "bucket-sort": [42, 7, 99, 15, 76, 38, 58, 12],
@@ -49,7 +60,14 @@ const algorithmDefaultArrays: Record<string, number[]> = {
 };
 
 // Map algorithm IDs to their info
-const algorithmInfoMap: Record<string, typeof bubbleSortInfo> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const algorithmInfoMap: Record<string, any> = {
+  // Arrays
+  "array-operations": arrayOperationsInfo,
+  "two-pointers": twoPointersInfo,
+  "sliding-window": slidingWindowInfo,
+  "prefix-sum": prefixSumInfo,
+  // Sorting
   "bubble-sort": bubbleSortInfo,
   "selection-sort": selectionSortInfo,
   "insertion-sort": insertionSortInfo,
@@ -67,25 +85,63 @@ const algorithmInfoMap: Record<string, typeof bubbleSortInfo> = {
   "intro-sort": introSortInfo,
 };
 
+// Map algorithm IDs to their category
+const algorithmCategoryMap: Record<string, string> = {
+  "array-operations": "arrays",
+  "two-pointers": "arrays",
+  "sliding-window": "arrays",
+  "prefix-sum": "arrays",
+  "bubble-sort": "sorting",
+  "selection-sort": "sorting",
+  "insertion-sort": "sorting",
+  "cocktail-shaker-sort": "sorting",
+  "shell-sort": "sorting",
+  "cycle-sort": "sorting",
+  "merge-sort": "sorting",
+  "quick-sort": "sorting",
+  "heap-sort": "sorting",
+  "counting-sort": "sorting",
+  "radix-sort": "sorting",
+  "bucket-sort": "sorting",
+  "pigeonhole-sort": "sorting",
+  "tim-sort": "sorting",
+  "intro-sort": "sorting",
+};
+
 interface VisualizerClientProps {
   initialAlgorithm?: string;
+  category?: string;
 }
 
-export function VisualizerClient({ initialAlgorithm }: VisualizerClientProps) {
+export function VisualizerClient({ initialAlgorithm, category }: VisualizerClientProps) {
   const t = useTranslations();
 
-  const { currentSnapshot, loadAlgorithm, inputArray, algorithmId } =
+  const { currentSnapshot, loadAlgorithm, inputArray, algorithmId, status } =
     usePlayerStore();
 
   // Algorithm parameters state
   const [algorithmParams, setAlgorithmParams] = useState<Record<string, number | string>>({});
 
   const getDefaultArray = (algoId: string) => algorithmDefaultArrays[algoId] || defaultArray;
-  const selectedAlgorithm = algorithmId || initialAlgorithm || "bubble-sort";
+
+  // Determine the default algorithm based on category
+  const getDefaultAlgorithmForCategory = (cat?: string) => {
+    if (cat === "arrays") return "array-operations";
+    if (cat === "sorting") return "bubble-sort";
+    return "bubble-sort";
+  };
+
+  const selectedAlgorithm = algorithmId || initialAlgorithm || getDefaultAlgorithmForCategory(category);
   const currentInputArray = inputArray.length > 0 ? inputArray : getDefaultArray(selectedAlgorithm);
 
   const algorithm = getAlgorithm(selectedAlgorithm);
-  const algorithms = getAllAlgorithms();
+  const allAlgorithms = getAllAlgorithms();
+
+  // Filter algorithms by category if provided
+  const algorithms = category
+    ? allAlgorithms.filter(algo => algorithmCategoryMap[algo.id] === category)
+    : allAlgorithms;
+
   const algorithmInfo = algorithmInfoMap[selectedAlgorithm];
 
   // Load initial algorithm from URL param on mount
@@ -144,6 +200,37 @@ export function VisualizerClient({ initialAlgorithm }: VisualizerClientProps) {
     return "idle" as const;
   };
 
+  // Get formatted operation title for array operations
+  const getOperationTitle = () => {
+    const operation = algorithmParams?.operation as string || 'traversal';
+    const targetIndex = algorithmParams?.targetIndex ?? 2;
+    const newValue = algorithmParams?.newValue ?? 99;
+    const searchValue = algorithmParams?.searchValue ?? 5;
+
+    const titles: Record<string, string> = {
+      'traversal': 'Traversal',
+      'access-index': `Access Index (${targetIndex})`,
+      'linear-search': `Searching Element (${searchValue})`,
+      'find-min': 'Find Minimum',
+      'find-max': 'Find Maximum',
+      'insert-beginning': `Insert at Beginning (${newValue})`,
+      'insert-middle': `Insert at Middle (${newValue})`,
+      'insert-index': `Insert at Index ${targetIndex} (${newValue})`,
+      'insert-end': `Insert at End (${newValue})`,
+      'delete-beginning': 'Delete from Beginning',
+      'delete-middle': 'Delete from Middle',
+      'delete-index': `Delete at Index (${targetIndex})`,
+      'delete-end': 'Delete from End',
+      'update-beginning': `Update Beginning → ${newValue}`,
+      'update-middle': `Update Middle → ${newValue}`,
+      'update-index': `Update Index ${targetIndex} → ${newValue}`,
+      'update-end': `Update End → ${newValue}`,
+      'reverse': 'Reverse Array',
+    };
+
+    return titles[operation] || 'Array Operation';
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
       {/* LEFT SIDEBAR - Static Content (Desktop only) */}
@@ -192,6 +279,15 @@ export function VisualizerClient({ initialAlgorithm }: VisualizerClientProps) {
             value={currentInputArray}
             onChange={handleInputChange}
             onApply={() => handleRun()}
+            algorithmParams={
+              algorithm?.parameters && algorithm.parameters.length > 0 ? (
+                <AlgorithmParams
+                  parameters={algorithm.parameters}
+                  values={algorithmParams}
+                  onChange={setAlgorithmParams}
+                />
+              ) : undefined
+            }
           />
         </div>
 
@@ -253,6 +349,43 @@ export function VisualizerClient({ initialAlgorithm }: VisualizerClientProps) {
 
         {/* Array Bars Visualization */}
         <div className="rounded-xl border border-[var(--border-primary)] bg-[var(--bg-card)] overflow-hidden">
+          {/* Operation Display Header */}
+          <div className="px-4 py-2 border-b border-[var(--border-primary)] bg-[var(--bg-tertiary)]">
+            {/* Operation Title - only for array-operations algorithm */}
+            {selectedAlgorithm === 'array-operations' && (
+              <div className="text-sm font-semibold text-[var(--color-primary-500)] mb-1">
+                Operation: {getOperationTitle()}
+              </div>
+            )}
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2 min-w-0">
+                <span className="text-xs text-[var(--text-secondary)] truncate">
+                  {message || 'Ready'}
+                </span>
+              </div>
+              {expression && (
+                <span className="text-xs font-mono text-[var(--color-primary-500)] bg-[var(--bg-secondary)] px-2 py-0.5 rounded flex-shrink-0">
+                  {expression}
+                </span>
+              )}
+            </div>
+            {/* Show current variables if any */}
+            {variables.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-1">
+                {variables.map((v, i) => (
+                  <span
+                    key={i}
+                    className={`text-xs font-mono px-1.5 py-0.5 rounded ${v.highlight
+                      ? 'bg-[var(--color-primary-500)]/20 text-[var(--color-primary-500)]'
+                      : 'bg-[var(--bg-secondary)] text-[var(--text-secondary)]'
+                      }`}
+                  >
+                    {v.name}={v.value}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
           <div className="h-[280px] sm:h-[320px] p-2 sm:p-4">
             <ArrayBars values={arrayState} markedIndices={markedIndices} pointers={pointers} />
           </div>
@@ -318,29 +451,45 @@ export function VisualizerClient({ initialAlgorithm }: VisualizerClientProps) {
 
       {/* RIGHT SIDEBAR - Dynamic Content (Desktop only) */}
       <div className="hidden lg:block lg:col-span-3 space-y-4 order-3">
-        {/* Input editor */}
-        <div className="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-primary)]">
+        {/* Input editor with Algorithm Parameters */}
+        <div className="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-primary)] space-y-4">
           <ArrayInputEditor
             value={currentInputArray}
             onChange={handleInputChange}
             onApply={() => handleRun()}
+            algorithmParams={
+              algorithm?.parameters && algorithm.parameters.length > 0 ? (
+                <AlgorithmParams
+                  parameters={algorithm.parameters}
+                  values={algorithmParams}
+                  onChange={setAlgorithmParams}
+                />
+              ) : undefined
+            }
           />
         </div>
-
-        {/* Algorithm Parameters */}
-        {algorithm?.parameters && algorithm.parameters.length > 0 && (
-          <AlgorithmParams
-            parameters={algorithm.parameters}
-            values={algorithmParams}
-            onChange={setAlgorithmParams}
-          />
-        )}
 
         {/* Current Operation */}
         <CurrentOperation message={message} operationType={getOperationType()} />
 
         {/* Variables Panel */}
         <VariablesPanel variables={variables} expression={expression} />
+
+        {/* Output Array - Show when finished */}
+        {status === 'finished' && (
+          <div className="p-4 rounded-xl bg-[var(--bg-card)] border border-green-500/50">
+            <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2 flex items-center gap-2">
+              <span className="text-green-500">✓</span>
+              Output Array
+            </h3>
+            <div className="font-mono text-sm text-[var(--color-primary-500)] bg-[var(--bg-secondary)] rounded-lg p-2 break-all">
+              [{arrayState.join(', ')}]
+            </div>
+            <p className="text-xs text-[var(--text-tertiary)] mt-2">
+              {arrayState.length} elements
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
