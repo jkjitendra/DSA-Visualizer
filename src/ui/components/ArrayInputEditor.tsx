@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Shuffle, Check, AlertCircle, Play } from "lucide-react";
 
@@ -9,6 +9,7 @@ interface ArrayInputEditorProps {
   onChange: (values: number[]) => void;
   onApply?: () => void;
   maxSize?: number;
+  algorithmParams?: ReactNode;
 }
 
 export function ArrayInputEditor({
@@ -16,6 +17,7 @@ export function ArrayInputEditor({
   onChange,
   onApply,
   maxSize = 20,
+  algorithmParams,
 }: ArrayInputEditorProps) {
   const [inputText, setInputText] = useState(value.join(", "));
   const [error, setError] = useState<string | null>(null);
@@ -139,6 +141,9 @@ export function ArrayInputEditor({
           {error}
         </p>
       )}
+
+      {/* Algorithm Parameters (inline) */}
+      {algorithmParams}
 
       {/* Apply button */}
       <Button
