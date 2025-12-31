@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { usePlayerStore } from "@/core/player";
 import { getAlgorithm, getAllAlgorithms } from "@/core/algorithms/registry";
@@ -11,7 +11,23 @@ import { ArrayInputEditor } from "@/ui/components/ArrayInputEditor";
 import { VariablesPanel } from "@/ui/components/VariablesPanel";
 import { CurrentOperation } from "@/ui/components/CurrentOperation";
 import { AlgorithmInfoCard } from "@/ui/components/AlgorithmInfoCard";
+import { AlgorithmView } from "@/ui/visualizers/views/AlgorithmView";
+import { AlgorithmParams } from "@/ui/components/AlgorithmParams";
 import { bubbleSortInfo } from "@/core/algorithms/sorting/bubbleSortInfo";
+import { selectionSortInfo } from "@/core/algorithms/sorting/selectionSortInfo";
+import { insertionSortInfo } from "@/core/algorithms/sorting/insertionSortInfo";
+import { cocktailShakerSortInfo } from "@/core/algorithms/sorting/cocktailShakerSortInfo";
+import { shellSortInfo } from "@/core/algorithms/sorting/shellSortInfo";
+import { cycleSortInfo } from "@/core/algorithms/sorting/cycleSortInfo";
+import { mergeSortInfo } from "@/core/algorithms/sorting/mergeSortInfo";
+import { quickSortInfo } from "@/core/algorithms/sorting/quickSortInfo";
+import { heapSortInfo } from "@/core/algorithms/sorting/heapSortInfo";
+import { countingSortInfo } from "@/core/algorithms/sorting/countingSortInfo";
+import { radixSortInfo } from "@/core/algorithms/sorting/radixSortInfo";
+import { bucketSortInfo } from "@/core/algorithms/sorting/bucketSortInfo";
+import { pigeonholeSortInfo } from "@/core/algorithms/sorting/pigeonholeSortInfo";
+import { timSortInfo } from "@/core/algorithms/sorting/timSortInfo";
+import { introSortInfo } from "@/core/algorithms/sorting/introSortInfo";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,37 +39,82 @@ import { ChevronDown, ArrowDownUp, BarChart3 } from "lucide-react";
 
 const defaultArray = [64, 34, 25, 12, 22, 11, 90, 45];
 
+// Algorithm-specific default arrays for better visualization
+const algorithmDefaultArrays: Record<string, number[]> = {
+  "counting-sort": [5, 3, 8, 3, 9, 1, 0, 4, 7, 2],
+  "radix-sort": [27, 14, 6, 37, 5, 30, 16, 42],
+  "bucket-sort": [42, 7, 99, 15, 76, 38, 58, 12],
+  "pigeonhole-sort": [8, 3, 6, 2, 7, 4, 5, 1],
+  "heap-sort": [13, 44, 1, 22, 22, 4, 42, 8, 11],
+};
+
 // Map algorithm IDs to their info
 const algorithmInfoMap: Record<string, typeof bubbleSortInfo> = {
   "bubble-sort": bubbleSortInfo,
+  "selection-sort": selectionSortInfo,
+  "insertion-sort": insertionSortInfo,
+  "cocktail-shaker-sort": cocktailShakerSortInfo,
+  "shell-sort": shellSortInfo,
+  "cycle-sort": cycleSortInfo,
+  "merge-sort": mergeSortInfo,
+  "quick-sort": quickSortInfo,
+  "heap-sort": heapSortInfo,
+  "counting-sort": countingSortInfo,
+  "radix-sort": radixSortInfo,
+  "bucket-sort": bucketSortInfo,
+  "pigeonhole-sort": pigeonholeSortInfo,
+  "tim-sort": timSortInfo,
+  "intro-sort": introSortInfo,
 };
 
-export function VisualizerClient() {
+interface VisualizerClientProps {
+  initialAlgorithm?: string;
+}
+
+export function VisualizerClient({ initialAlgorithm }: VisualizerClientProps) {
   const t = useTranslations();
 
   const { currentSnapshot, loadAlgorithm, inputArray, algorithmId } =
     usePlayerStore();
 
-  const currentInputArray = inputArray.length > 0 ? inputArray : defaultArray;
-  const selectedAlgorithm = algorithmId || "bubble-sort";
+  // Algorithm parameters state
+  const [algorithmParams, setAlgorithmParams] = useState<Record<string, number | string>>({});
+
+  const getDefaultArray = (algoId: string) => algorithmDefaultArrays[algoId] || defaultArray;
+  const selectedAlgorithm = algorithmId || initialAlgorithm || "bubble-sort";
+  const currentInputArray = inputArray.length > 0 ? inputArray : getDefaultArray(selectedAlgorithm);
 
   const algorithm = getAlgorithm(selectedAlgorithm);
   const algorithms = getAllAlgorithms();
   const algorithmInfo = algorithmInfoMap[selectedAlgorithm];
 
+  // Load initial algorithm from URL param on mount
+  useEffect(() => {
+    if (initialAlgorithm) {
+      loadAlgorithm(initialAlgorithm, getDefaultArray(initialAlgorithm));
+    }
+    // eslint-disable-next-line react-hooks-exhaustive-deps
+  }, [initialAlgorithm]);
+
+  // Reset params when algorithm changes
+  useEffect(() => {
+    setAlgorithmParams({});
+  }, [selectedAlgorithm]);
+
   const handleRun = () => {
     const state = usePlayerStore.getState();
-    const input = state.inputArray.length > 0 ? state.inputArray : defaultArray;
     const algoId = state.algorithmId || "bubble-sort";
+    const input = state.inputArray.length > 0 ? state.inputArray : getDefaultArray(algoId);
     if (input.length >= 2) {
-      loadAlgorithm(algoId, input);
+      loadAlgorithm(algoId, input, algorithmParams);
     }
   };
 
   const handleAlgorithmChange = (algoId: string) => {
-    const input = usePlayerStore.getState().inputArray;
-    const finalInput = input.length > 0 ? input : defaultArray;
-    loadAlgorithm(algoId, finalInput);
+    // Always use the algorithm-specific default when switching
+    const algoDefault = getDefaultArray(algoId);
+    usePlayerStore.setState({ inputArray: algoDefault });
+    loadAlgorithm(algoId, algoDefault);
   };
 
   const handleInputChange = (values: number[]) => {
@@ -73,6 +134,7 @@ export function VisualizerClient() {
   const pointers = currentSnapshot?.pointers ?? [];
   const variables = currentSnapshot?.variables ?? [];
   const expression = currentSnapshot?.expression;
+  const auxiliaryState = currentSnapshot?.auxiliaryState;
 
   const getOperationType = () => {
     if (message?.toLowerCase().includes("swap")) return "swap" as const;
@@ -196,6 +258,11 @@ export function VisualizerClient() {
           </div>
         </div>
 
+        {/* Algorithm-Specific Visualization */}
+        {auxiliaryState && (
+          <AlgorithmView auxiliaryState={auxiliaryState} />
+        )}
+
         {/* Player controls */}
         <div className="p-3 sm:p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-primary)]">
           <PlayerControls />
@@ -259,6 +326,15 @@ export function VisualizerClient() {
             onApply={() => handleRun()}
           />
         </div>
+
+        {/* Algorithm Parameters */}
+        {algorithm?.parameters && algorithm.parameters.length > 0 && (
+          <AlgorithmParams
+            parameters={algorithm.parameters}
+            values={algorithmParams}
+            onChange={setAlgorithmParams}
+          />
+        )}
 
         {/* Current Operation */}
         <CurrentOperation message={message} operationType={getOperationType()} />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Shuffle, Check, AlertCircle, Play } from "lucide-react";
 
@@ -19,6 +19,19 @@ export function ArrayInputEditor({
 }: ArrayInputEditorProps) {
   const [inputText, setInputText] = useState(value.join(", "));
   const [error, setError] = useState<string | null>(null);
+  const lastExternalValue = useRef<string>(value.join(", "));
+
+  // Sync internal state ONLY when value prop changes from external source
+  useEffect(() => {
+    const newValueStr = value.join(", ");
+    // Only sync if this is a different value than what we last saw AND 
+    // different from current parsed input (external change, not user typing)
+    if (newValueStr !== lastExternalValue.current) {
+      lastExternalValue.current = newValueStr;
+      setInputText(newValueStr);
+      setError(null);
+    }
+  }, [value]);
 
   const parseInput = (text: string): { values: number[]; error: string | null } => {
     if (!text.trim()) {
@@ -55,6 +68,7 @@ export function ArrayInputEditor({
     const { values, error } = parseInput(text);
     setError(error);
     if (!error && values.length > 0) {
+      lastExternalValue.current = values.join(", "); // Track what we're sending up
       onChange(values);
     }
   };

@@ -1,6 +1,20 @@
 import { IAlgorithm, AlgorithmMeta } from './IAlgorithm';
 import { ArrayInput } from '../models';
 import { bubbleSort } from './sorting/bubbleSort';
+import { selectionSort } from './sorting/selectionSort';
+import { insertionSort } from './sorting/insertionSort';
+import { cocktailShakerSort } from './sorting/cocktailShakerSort';
+import { shellSort } from './sorting/shellSort';
+import { cycleSort } from './sorting/cycleSort';
+import { mergeSort } from './sorting/mergeSort';
+import { quickSort } from './sorting/quickSort';
+import { heapSort } from './sorting/heapSort';
+import { countingSort } from './sorting/countingSort';
+import { radixSort } from './sorting/radixSort';
+import { bucketSort } from './sorting/bucketSort';
+import { pigeonholeSort } from './sorting/pigeonholeSort';
+import { timSort } from './sorting/timSort';
+import { introSort } from './sorting/introSort';
 
 /**
  * Registry of all available algorithms
@@ -48,5 +62,24 @@ export function getAlgorithmsByCategory(category: string): AlgorithmMeta[] {
   return getAllAlgorithms().filter((algo) => algo.category === category);
 }
 
-// Register built-in algorithms
+// Register built-in algorithms (in learning order)
+// Tier 1: Fundamentals
 registerAlgorithm(bubbleSort);
+registerAlgorithm(selectionSort);
+registerAlgorithm(insertionSort);
+registerAlgorithm(cocktailShakerSort);
+// Tier 2: Improved Simple
+registerAlgorithm(shellSort);
+registerAlgorithm(cycleSort);
+// Tier 3: Divide & Conquer
+registerAlgorithm(mergeSort);
+registerAlgorithm(quickSort);
+registerAlgorithm(heapSort);
+// Tier 4: Hybrid
+registerAlgorithm(timSort);
+registerAlgorithm(introSort);
+// Tier 5: Non-Comparison
+registerAlgorithm(countingSort);
+registerAlgorithm(radixSort);
+registerAlgorithm(bucketSort);
+registerAlgorithm(pigeonholeSort);
