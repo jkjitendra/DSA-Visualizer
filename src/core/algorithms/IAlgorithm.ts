@@ -8,6 +8,31 @@ export type ValidationResult =
   | { ok: false; error: string };
 
 /**
+ * Parameter types for algorithm configuration
+ */
+export type AlgorithmParameterType = 'number' | 'select';
+
+export interface NumberParameter {
+  type: 'number';
+  id: string;
+  label: string;
+  default: number;
+  min: number;
+  max: number;
+  step?: number;
+}
+
+export interface SelectParameter {
+  type: 'select';
+  id: string;
+  label: string;
+  default: string;
+  options: { value: string; label: string }[];
+}
+
+export type AlgorithmParameter = NumberParameter | SelectParameter;
+
+/**
  * Algorithm interface - all algorithms must implement this
  * Following Dependency Inversion Principle (DIP)
  */
@@ -37,14 +62,19 @@ export interface IAlgorithm<TInput> {
   /** Space complexity */
   spaceComplexity: string;
 
+  /** Optional configurable parameters */
+  parameters?: AlgorithmParameter[];
+
   /** Validate input before running */
   validate(input: TInput): ValidationResult;
 
   /**
    * Run the algorithm and yield events
    * Uses generator for memory efficiency with large inputs
+   * @param input - The input data
+   * @param params - Optional algorithm parameters (key-value pairs)
    */
-  run(input: TInput): Generator<AlgoEvent, void, unknown>;
+  run(input: TInput, params?: Record<string, number | string>): Generator<AlgoEvent, void, unknown>;
 }
 
 /**
