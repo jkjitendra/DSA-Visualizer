@@ -1,0 +1,72 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { AlgorithmParameter } from "@/core/algorithms/IAlgorithm";
+
+interface AlgorithmParamsProps {
+  parameters: AlgorithmParameter[];
+  values: Record<string, number | string>;
+  onChange: (values: Record<string, number | string>) => void;
+}
+
+export function AlgorithmParams({ parameters, values, onChange }: AlgorithmParamsProps) {
+  const handleChange = (id: string, value: number | string) => {
+    onChange({ ...values, [id]: value });
+  };
+
+  if (parameters.length === 0) return null;
+
+  return (
+    <div className="bg-[var(--bg-tertiary)] rounded-xl p-4 border border-[var(--border-primary)]">
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
+        <span className="text-lg">⚙️</span>
+        Algorithm Parameters
+      </h3>
+
+      <div className="space-y-3">
+        {parameters.map((param) => (
+          <div key={param.id} className="flex items-center justify-between gap-4">
+            <label className="text-sm text-[var(--text-secondary)] flex-shrink-0">
+              {param.label}
+            </label>
+
+            {param.type === 'number' && (
+              <div className="flex items-center gap-2">
+                <input
+                  type="range"
+                  min={param.min}
+                  max={param.max}
+                  step={param.step || 1}
+                  value={values[param.id] as number ?? param.default}
+                  onChange={(e) => handleChange(param.id, parseInt(e.target.value))}
+                  className="w-24 h-2 bg-[var(--bg-secondary)] rounded-lg appearance-none cursor-pointer accent-[var(--color-primary-500)]"
+                />
+                <span className="text-sm font-mono text-[var(--color-primary-500)] w-8 text-center">
+                  {values[param.id] ?? param.default}
+                </span>
+              </div>
+            )}
+
+            {param.type === 'select' && (
+              <select
+                value={values[param.id] as string ?? param.default}
+                onChange={(e) => handleChange(param.id, e.target.value)}
+                className="bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-primary)] rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)]"
+              >
+                {param.options.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <p className="text-xs text-[var(--text-tertiary)] mt-3">
+        💡 Change parameters and click "Apply & Run" to see the effect
+      </p>
+    </div>
+  );
+}
