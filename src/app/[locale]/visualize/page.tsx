@@ -4,18 +4,18 @@ import { VisualizerClient } from "@/ui/visualizers/VisualizerClient";
 
 interface VisualizePageProps {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ algorithm?: string }>;
+  searchParams: Promise<{ algorithm?: string; category?: string }>;
 }
 
 export default async function VisualizePage({ params, searchParams }: VisualizePageProps) {
   const { locale } = await params;
-  const { algorithm } = await searchParams;
+  const { algorithm, category } = await searchParams;
   setRequestLocale(locale);
 
-  return <VisualizeContent initialAlgorithm={algorithm} />;
+  return <VisualizeContent initialAlgorithm={algorithm} category={category} />;
 }
 
-function VisualizeContent({ initialAlgorithm }: { initialAlgorithm?: string }) {
+function VisualizeContent({ initialAlgorithm, category }: { initialAlgorithm?: string; category?: string }) {
   const t = useTranslations();
 
   return (
@@ -31,7 +31,8 @@ function VisualizeContent({ initialAlgorithm }: { initialAlgorithm?: string }) {
       </div>
 
       {/* Visualizer */}
-      <VisualizerClient initialAlgorithm={initialAlgorithm} />
+      <VisualizerClient initialAlgorithm={initialAlgorithm} category={category} />
     </div>
   );
 }
+

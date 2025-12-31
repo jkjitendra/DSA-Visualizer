@@ -7,7 +7,7 @@ interface TopicPageProps {
   params: Promise<{ locale: string; topic: string }>;
 }
 
-const validTopics = ["sorting", "graphs", "trees", "stacks"] as const;
+const validTopics = ["arrays", "sorting", "graphs", "trees", "stacks"] as const;
 
 export function generateStaticParams() {
   return validTopics.map((topic) => ({ topic }));
@@ -23,6 +23,19 @@ export default async function TopicPage({ params }: TopicPageProps) {
 
   return <TopicContent locale={locale} topic={topic} />;
 }
+
+const arraysTiers = [
+  {
+    name: "Tier 1: Basic Operations",
+    description: "Fundamental array operations with complexity analysis",
+    algorithms: ["array-operations"],
+  },
+  {
+    name: "Tier 2: Patterns & Techniques",
+    description: "Common patterns for solving array problems efficiently",
+    algorithms: ["two-pointers", "sliding-window", "prefix-sum"],
+  },
+];
 
 const sortingTiers = [
   {
@@ -53,6 +66,12 @@ const sortingTiers = [
 ];
 
 const algorithmNames: Record<string, string> = {
+  // Arrays
+  "array-operations": "Array Operations",
+  "two-pointers": "Two Pointers",
+  "sliding-window": "Sliding Window",
+  "prefix-sum": "Prefix Sum",
+  // Sorting
   "bubble-sort": "Bubble Sort",
   "selection-sort": "Selection Sort",
   "insertion-sort": "Insertion Sort",
@@ -70,8 +89,68 @@ const algorithmNames: Record<string, string> = {
   "pigeonhole-sort": "Pigeonhole Sort",
 };
 
+const algorithmDescriptions: Record<string, string> = {
+  "array-operations": "Insert, Delete, Update, Search, Traverse",
+  "two-pointers": "Find pair sum in sorted array",
+  "sliding-window": "Max sum subarray of size k",
+  "prefix-sum": "O(1) range sum queries",
+};
+
 function TopicContent({ locale, topic }: { locale: string; topic: string }) {
   const t = useTranslations();
+
+  if (topic === "arrays") {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back Button */}
+        <div className="mb-6">
+          <Link href={`/${locale}/topics`} className="text-[var(--color-primary-500)] hover:underline text-sm">
+            ← Back to Topics
+          </Link>
+        </div>
+
+        <div className="text-center mb-12">
+          <span className="text-6xl mb-4 block">📦</span>
+          <h1 className="text-4xl font-bold text-[var(--text-primary)] mb-4">
+            {t("topics.arrays")}
+          </h1>
+          <p className="text-[var(--text-secondary)] max-w-2xl mx-auto">
+            Master fundamental array operations and common problem-solving patterns
+          </p>
+        </div>
+
+        <div className="space-y-10">
+          {arraysTiers.map((tier) => (
+            <div key={tier.name}>
+              <div className="mb-4">
+                <h2 className="text-xl font-bold text-[var(--text-primary)]">{tier.name}</h2>
+                <p className="text-sm text-[var(--text-secondary)]">{tier.description}</p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {tier.algorithms.map((algo) => (
+                  <Link
+                    key={algo}
+                    href={`/${locale}/visualize?algorithm=${algo}&category=arrays`}
+                    className="group p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-primary)] hover:border-[var(--color-primary-500)] transition-all duration-300 hover:shadow-lg"
+                  >
+                    <h3 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--color-primary-500)]">
+                      {algorithmNames[algo]}
+                    </h3>
+                    {algorithmDescriptions[algo] && (
+                      <p className="text-xs text-[var(--text-tertiary)] mt-1">
+                        {algorithmDescriptions[algo]}
+                      </p>
+                    )}
+                    <p className="text-xs text-[var(--text-secondary)] mt-2">Visualize →</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   if (topic === "sorting") {
     return (
@@ -104,7 +183,7 @@ function TopicContent({ locale, topic }: { locale: string; topic: string }) {
                 {tier.algorithms.map((algo) => (
                   <Link
                     key={algo}
-                    href={`/${locale}/visualize?algorithm=${algo}`}
+                    href={`/${locale}/visualize?algorithm=${algo}&category=sorting`}
                     className="group p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-primary)] hover:border-[var(--color-primary-500)] transition-all duration-300 hover:shadow-lg"
                   >
                     <h3 className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--color-primary-500)]">
@@ -136,3 +215,4 @@ function TopicContent({ locale, topic }: { locale: string; topic: string }) {
     </div>
   );
 }
+
