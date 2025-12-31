@@ -1,4 +1,4 @@
-import { AlgoEvent } from '../events/events';
+import { AlgoEvent, AuxiliaryState } from '../events/events';
 
 /**
  * Player status states
@@ -47,10 +47,12 @@ export interface AlgorithmSnapshot {
     comparisons: number;
     swaps: number;
   };
-  // New: pointers and variables
+  // Pointers and variables
   pointers: VariablePointer[];
   variables: VariableValue[];
-  expression?: string; // e.g., "arr[1] > arr[2] → 34 > 25 = true"
+  expression?: string;
+  // Algorithm-specific visualization state
+  auxiliaryState?: AuxiliaryState;
 }
 
 /**
@@ -92,7 +94,7 @@ export interface PlayerActions {
   setSpeedMs: (ms: number) => void;
 
   // Algorithm setup
-  loadAlgorithm: (algorithmId: string, input: number[]) => void;
+  loadAlgorithm: (algorithmId: string, input: number[], params?: Record<string, number | string>) => void;
 
   // Derived state helpers
   getProgress: () => number;

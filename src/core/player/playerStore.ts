@@ -25,6 +25,7 @@ const createInitialSnapshot = (inputArray: number[]): AlgorithmSnapshot => ({
   pointers: [],
   variables: [],
   expression: undefined,
+  auxiliaryState: undefined, // Explicitly clear to prevent carryover from previous algorithm
 });
 
 /**
@@ -44,6 +45,7 @@ const applyEvent = (
     metrics: { ...prevSnapshot.metrics },
     pointers: [...prevSnapshot.pointers],
     variables: [...prevSnapshot.variables],
+    auxiliaryState: prevSnapshot.auxiliaryState ? { ...prevSnapshot.auxiliaryState } : undefined,
   };
 
   switch (event.type) {
@@ -94,10 +96,21 @@ const applyEvent = (
 
     case 'pointer':
       newSnapshot.pointers = event.pointers;
-      newSnapshot.variables = event.variables;
+      // Merge variables: update existing ones and add new ones (cumulative tracking)
+      if (event.variables && event.variables.length > 0) {
+        const existingVars = new Map(newSnapshot.variables.map(v => [v.name, v]));
+        for (const newVar of event.variables) {
+          existingVars.set(newVar.name, newVar);
+        }
+        newSnapshot.variables = Array.from(existingVars.values());
+      }
       if (event.expression !== undefined) {
         newSnapshot.expression = event.expression;
       }
+      break;
+
+    case 'auxiliary':
+      newSnapshot.auxiliaryState = event.state;
       break;
 
     default:
@@ -285,7 +298,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => {
       }
     },
 
-    loadAlgorithm: (algorithmId: string, input: number[]) => {
+    loadAlgorithm: (algorithmId: string, input: number[], params?: Record<string, number | string>) => {
       clearPlayInterval();
 
       const algorithm = getAlgorithm(algorithmId);
@@ -301,9 +314,9 @@ export const usePlayerStore = create<PlayerStore>((set, get) => {
         return;
       }
 
-      // Collect all events
+      // Collect all events (pass params to run)
       const events: AlgoEvent[] = [];
-      for (const event of algorithm.run({ values: input })) {
+      for (const event of algorithm.run({ values: input }, params)) {
         events.push(event);
       }
 
