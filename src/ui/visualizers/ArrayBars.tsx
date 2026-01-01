@@ -48,6 +48,13 @@ const defaultColor = {
 
 export function ArrayBars({ values, markedIndices, pointers = [], maxValue }: ArrayBarsProps) {
   const max = maxValue ?? Math.max(...values, 1);
+  const min = Math.min(...values, 0);
+  const hasNegative = min < 0;
+
+  // Normalize: shift all values so minimum becomes a small positive value
+  // This way all bars grow upward, with smallest value getting ~10% height
+  const range = max - min || 1;
+
   const barWidth = Math.max(100 / values.length - 1, 2);
 
   // Create a map of index -> pointer labels
@@ -63,7 +70,17 @@ export function ArrayBars({ values, markedIndices, pointers = [], maxValue }: Ar
 
   const bars = useMemo(() => {
     return values.map((value, index) => {
-      const height = (value / max) * 100;
+      // For arrays with negatives: normalize to 0-100 range
+      // For positive-only: use regular percentage of max
+      let heightPercent: number;
+      if (hasNegative) {
+        // Shift values: min becomes ~10%, max becomes 100%
+        const shifted = value - min;
+        heightPercent = ((shifted / range) * 90) + 10; // 10-100% range
+      } else {
+        heightPercent = (value / max) * 100;
+      }
+
       const markType = markedIndices.get(index);
       const colors = markType ? markColors[markType] || defaultColor : defaultColor;
       const indexPointers = pointerMap.get(index) || [];
@@ -71,13 +88,13 @@ export function ArrayBars({ values, markedIndices, pointers = [], maxValue }: Ar
       return {
         index,
         value,
-        height,
+        heightPercent: Math.max(heightPercent, 5), // Minimum 5% height for visibility
         colors,
         markType,
         pointers: indexPointers,
       };
     });
-  }, [values, markedIndices, max, pointerMap]);
+  }, [values, markedIndices, max, min, range, hasNegative, pointerMap]);
 
   return (
     <div className="relative w-full h-full min-h-[200px] p-4 pt-10 pb-8">
@@ -88,7 +105,7 @@ export function ArrayBars({ values, markedIndices, pointers = [], maxValue }: Ar
             className="relative flex flex-col items-center transition-all duration-200 ease-out"
             style={{
               width: `${barWidth}%`,
-              height: `${bar.height}%`,
+              height: `${bar.heightPercent}%`,
               minHeight: "20px",
             }}
           >
@@ -131,7 +148,7 @@ export function ArrayBars({ values, markedIndices, pointers = [], maxValue }: Ar
               }}
             />
 
-            {/* Value label (show if bars are wide enough) */}
+            {/* Value label */}
             {barWidth > 4 && (
               <span
                 className="absolute -bottom-6 text-xs font-medium text-[var(--text-secondary)]"
@@ -146,4 +163,3 @@ export function ArrayBars({ values, markedIndices, pointers = [], maxValue }: Ar
     </div>
   );
 }
-

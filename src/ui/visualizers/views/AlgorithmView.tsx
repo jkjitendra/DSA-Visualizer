@@ -9,6 +9,7 @@ import { GapView } from "./GapView";
 import { PartitionView } from "./PartitionView";
 import { RunView } from "./RunView";
 import { ModeView } from "./ModeView";
+import { VotingView } from "./VotingView";
 
 interface AlgorithmViewProps {
   auxiliaryState?: AuxiliaryState;
@@ -87,6 +88,14 @@ export function AlgorithmView({ auxiliaryState }: AlgorithmViewProps) {
       return auxiliaryState.modeData ? (
         <ModeView
           modeData={auxiliaryState.modeData}
+          phase={auxiliaryState.phase}
+        />
+      ) : null;
+
+    case "voting":
+      return auxiliaryState.votingData ? (
+        <VotingView
+          votingData={auxiliaryState.votingData}
           phase={auxiliaryState.phase}
         />
       ) : null;

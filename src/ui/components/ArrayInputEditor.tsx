@@ -48,8 +48,8 @@ export function ArrayInputEditor({
       if (isNaN(num)) {
         return { values: [], error: `Invalid number: "${part}"` };
       }
-      if (num < 0 || num > 100) {
-        return { values: [], error: `Values must be between 0 and 100` };
+      if (num < -100 || num > 100) {
+        return { values: [], error: `Values must be between -100 and 100` };
       }
       values.push(num);
     }

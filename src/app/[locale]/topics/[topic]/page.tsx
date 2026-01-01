@@ -35,6 +35,11 @@ const arraysTiers = [
     description: "Common patterns for solving array problems efficiently",
     algorithms: ["two-pointers", "sliding-window", "prefix-sum"],
   },
+  {
+    name: "Tier 3: Classic Algorithms",
+    description: "Essential array algorithms for interviews and competitive programming",
+    algorithms: ["kadanes", "dutch-national-flag", "moores-voting", "merge-sorted-arrays", "rotate-array", "array-rearrangement", "next-permutation"],
+  },
 ];
 
 const sortingTiers = [
@@ -71,6 +76,13 @@ const algorithmNames: Record<string, string> = {
   "two-pointers": "Two Pointers",
   "sliding-window": "Sliding Window",
   "prefix-sum": "Prefix Sum",
+  "kadanes": "Kadane's Algorithm",
+  "dutch-national-flag": "Dutch National Flag",
+  "moores-voting": "Moore's Voting",
+  "merge-sorted-arrays": "Merge Sorted Arrays",
+  "rotate-array": "Rotate Array",
+  "array-rearrangement": "Rearrangement",
+  "next-permutation": "Next Permutation",
   // Sorting
   "bubble-sort": "Bubble Sort",
   "selection-sort": "Selection Sort",
@@ -94,6 +106,13 @@ const algorithmDescriptions: Record<string, string> = {
   "two-pointers": "Find pair sum in sorted array",
   "sliding-window": "Max sum subarray of size k",
   "prefix-sum": "O(1) range sum queries",
+  "kadanes": "Maximum subarray sum in O(n)",
+  "dutch-national-flag": "Sort 0s, 1s, 2s with 3 pointers",
+  "moores-voting": "Find majority element (>n/2)",
+  "merge-sorted-arrays": "Merge two sorted arrays",
+  "rotate-array": "Rotate by k using reversal",
+  "array-rearrangement": "Alternate positives and negatives",
+  "next-permutation": "Next lexicographic order",
 };
 
 function TopicContent({ locale, topic }: { locale: string; topic: string }) {

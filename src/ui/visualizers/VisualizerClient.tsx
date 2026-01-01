@@ -33,6 +33,13 @@ import { arrayOperationsInfo } from "@/core/algorithms/arrays/arrayOperationsInf
 import { twoPointersInfo } from "@/core/algorithms/arrays/twoPointersInfo";
 import { slidingWindowInfo } from "@/core/algorithms/arrays/slidingWindowInfo";
 import { prefixSumInfo } from "@/core/algorithms/arrays/prefixSumInfo";
+import { kadanesInfo } from "@/core/algorithms/arrays/kadanesInfo";
+import { dutchNationalFlagInfo } from "@/core/algorithms/arrays/dutchNationalFlagInfo";
+import { mooresVotingInfo } from "@/core/algorithms/arrays/mooresVotingInfo";
+import { mergeSortedArraysInfo } from "@/core/algorithms/arrays/mergeSortedArraysInfo";
+import { rotateArrayInfo } from "@/core/algorithms/arrays/rotateArrayInfo";
+import { arrayRearrangementInfo } from "@/core/algorithms/arrays/arrayRearrangementInfo";
+import { nextPermutationInfo } from "@/core/algorithms/arrays/nextPermutationInfo";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -51,6 +58,13 @@ const algorithmDefaultArrays: Record<string, number[]> = {
   "two-pointers": [1, 2, 3, 4, 5, 6, 7, 8, 9],  // Sorted for two-pointers
   "sliding-window": [2, 1, 5, 1, 3, 2, 8, 4, 6],
   "prefix-sum": [3, 1, 4, 1, 5, 9, 2, 6],
+  "kadanes": [-2, 1, -3, 4, -1, 2, 1, -5, 4],
+  "dutch-national-flag": [2, 0, 1, 2, 0, 1, 0, 2, 1],
+  "moores-voting": [2, 2, 1, 1, 2, 2, 2],
+  "merge-sorted-arrays": [1, 3, 5, 7, 2, 4, 6, 8],
+  "rotate-array": [1, 2, 3, 4, 5, 6, 7],
+  "array-rearrangement": [1, -1, 3, -2, 5, -4, 7, -6],
+  "next-permutation": [1, 2, 3, 4],
   // Sorting topic
   "counting-sort": [5, 3, 8, 3, 9, 1, 0, 4, 7, 2],
   "radix-sort": [27, 14, 6, 37, 5, 30, 16, 42],
@@ -67,6 +81,13 @@ const algorithmInfoMap: Record<string, any> = {
   "two-pointers": twoPointersInfo,
   "sliding-window": slidingWindowInfo,
   "prefix-sum": prefixSumInfo,
+  "kadanes": kadanesInfo,
+  "dutch-national-flag": dutchNationalFlagInfo,
+  "moores-voting": mooresVotingInfo,
+  "merge-sorted-arrays": mergeSortedArraysInfo,
+  "rotate-array": rotateArrayInfo,
+  "array-rearrangement": arrayRearrangementInfo,
+  "next-permutation": nextPermutationInfo,
   // Sorting
   "bubble-sort": bubbleSortInfo,
   "selection-sort": selectionSortInfo,
@@ -91,6 +112,13 @@ const algorithmCategoryMap: Record<string, string> = {
   "two-pointers": "arrays",
   "sliding-window": "arrays",
   "prefix-sum": "arrays",
+  "kadanes": "arrays",
+  "dutch-national-flag": "arrays",
+  "moores-voting": "arrays",
+  "merge-sorted-arrays": "arrays",
+  "rotate-array": "arrays",
+  "array-rearrangement": "arrays",
+  "next-permutation": "arrays",
   "bubble-sort": "sorting",
   "selection-sort": "sorting",
   "insertion-sort": "sorting",
@@ -273,23 +301,6 @@ export function VisualizerClient({ initialAlgorithm, category }: VisualizerClien
 
       {/* CENTER - Main Visualization */}
       <div className="lg:col-span-6 space-y-4 order-1 lg:order-2">
-        {/* MOBILE: Input Array on top (< 1024px) */}
-        <div className="lg:hidden p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-primary)]">
-          <ArrayInputEditor
-            value={currentInputArray}
-            onChange={handleInputChange}
-            onApply={() => handleRun()}
-            algorithmParams={
-              algorithm?.parameters && algorithm.parameters.length > 0 ? (
-                <AlgorithmParams
-                  parameters={algorithm.parameters}
-                  values={algorithmParams}
-                  onChange={setAlgorithmParams}
-                />
-              ) : undefined
-            }
-          />
-        </div>
 
         {/* Header bar */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-4 p-3 sm:p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-primary)]">
@@ -353,6 +364,24 @@ export function VisualizerClient({ initialAlgorithm, category }: VisualizerClien
               <span className="font-semibold text-[var(--text-primary)]">{metrics.swaps}</span>
             </div>
           </div>
+        </div>
+
+        {/* MOBILE: Input Array after algorithm selector (< 1024px) */}
+        <div className="lg:hidden p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-primary)]">
+          <ArrayInputEditor
+            value={currentInputArray}
+            onChange={handleInputChange}
+            onApply={() => handleRun()}
+            algorithmParams={
+              algorithm?.parameters && algorithm.parameters.length > 0 ? (
+                <AlgorithmParams
+                  parameters={algorithm.parameters}
+                  values={algorithmParams}
+                  onChange={setAlgorithmParams}
+                />
+              ) : undefined
+            }
+          />
         </div>
 
         {/* Array Bars Visualization */}
