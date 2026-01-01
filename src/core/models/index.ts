@@ -9,6 +9,14 @@ export interface ArrayInput {
   values: number[];
 }
 
+// ============ String Models ============
+
+export interface StringInput {
+  text: string;
+  pattern?: string;  // For pattern matching algorithms
+  text2?: string;    // For comparison algorithms (LCS, anagram)
+}
+
 // ============ Tree Models ============
 
 export interface TreeNode {
@@ -89,6 +97,7 @@ export interface HeapInput {
  */
 export type AnyInput =
   | ArrayInput
+  | StringInput
   | TreeInput
   | GraphInput
   | StackInput
@@ -107,3 +116,6 @@ export const isTreeInput = (input: AnyInput): input is TreeInput =>
 
 export const isGraphInput = (input: AnyInput): input is GraphInput =>
   'nodes' in input && 'edges' in input;
+
+export const isStringInput = (input: AnyInput): input is StringInput =>
+  'text' in input && typeof (input as StringInput).text === 'string';

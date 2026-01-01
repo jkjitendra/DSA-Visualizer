@@ -18,7 +18,8 @@ export type AlgoEventType =
   | 'enqueue'
   | 'dequeue'
   | 'pointer'
-  | 'auxiliary';
+  | 'auxiliary'
+  | 'result';
 
 /**
  * Auxiliary state for algorithm-specific visualizations
@@ -93,8 +94,75 @@ export interface VotingData {
   isMajority?: boolean;
 }
 
+// ============ String Visualization Data ============
+
+export interface StringCharacterData {
+  char: string;
+  index: number;
+  highlight?: 'match' | 'mismatch' | 'current' | 'pattern' | 'found';
+  isPattern?: boolean;
+}
+
+export interface StringCharsState {
+  text: StringCharacterData[];
+  pattern?: StringCharacterData[];
+  patternOffset?: number;  // Where pattern is aligned in text
+  matchPositions?: number[];  // Found match positions
+}
+
+export interface FrequencyData {
+  char: string;
+  count: number;
+  highlight?: boolean;
+}
+
+export interface FrequencyState {
+  frequencies: FrequencyData[];
+  frequencies2?: FrequencyData[];  // For comparison (anagram)
+  isMatch?: boolean;
+}
+
+export interface LPSData {
+  index: number;
+  value: number;
+  highlight?: boolean;
+  prefixEnd?: number;  // For showing prefix-suffix relationship
+  suffixStart?: number;
+}
+
+export interface LPSState {
+  array: LPSData[];
+  arrayType: 'lps' | 'z';  // LPS for KMP, Z for Z-algorithm
+  currentBuildIndex?: number;
+}
+
+export interface HashState {
+  textHash: number;
+  patternHash: number;
+  windowStart: number;
+  windowEnd: number;
+  base?: number;
+  modulo?: number;
+  isMatch?: boolean;
+}
+
+export interface DPCell {
+  row: number;
+  col: number;
+  value: number;
+  highlight?: 'current' | 'path' | 'max';
+}
+
+export interface DPTableState {
+  rows: string[];  // Row labels (chars of string 1)
+  cols: string[];  // Col labels (chars of string 2)
+  cells: DPCell[];
+  maxValue?: number;
+  maxCell?: { row: number; col: number };
+}
+
 export interface AuxiliaryState {
-  type: 'buckets' | 'heap' | 'count' | 'merge' | 'insertion' | 'gap' | 'partition' | 'runs' | 'mode' | 'voting';
+  type: 'buckets' | 'heap' | 'count' | 'merge' | 'insertion' | 'gap' | 'partition' | 'runs' | 'mode' | 'voting' | 'string-chars' | 'frequency' | 'lps' | 'hash' | 'dp-table';
   phase?: string;
   buckets?: BucketData[];
   heap?: { nodes: HeapNode[]; heapSize: number };
@@ -109,6 +177,12 @@ export interface AuxiliaryState {
   runData?: RunData;
   modeData?: ModeData;
   votingData?: VotingData;
+  // String visualization states
+  stringChars?: StringCharsState;
+  frequencyState?: FrequencyState;
+  lpsState?: LPSState;
+  hashState?: HashState;
+  dpTableState?: DPTableState;
 }
 
 export interface BaseEvent {
@@ -204,6 +278,13 @@ export interface AuxiliaryEvent extends BaseEvent {
   state: AuxiliaryState;
 }
 
+export interface ResultEvent extends BaseEvent {
+  type: 'result';
+  resultType: 'string' | 'indices' | 'boolean' | 'frequency';
+  value: string | number[] | boolean;
+  label?: string;
+}
+
 export type AlgoEvent =
   | CompareEvent
   | SwapEvent
@@ -219,7 +300,8 @@ export type AlgoEvent =
   | EnqueueEvent
   | DequeueEvent
   | PointerEvent
-  | AuxiliaryEvent;
+  | AuxiliaryEvent
+  | ResultEvent;
 
 /**
  * Helper functions to create events
@@ -305,5 +387,16 @@ export const createEvent = {
   auxiliary: (state: AuxiliaryState): AuxiliaryEvent => ({
     type: 'auxiliary',
     state,
+  }),
+
+  result: (
+    resultType: 'string' | 'indices' | 'boolean' | 'frequency',
+    value: string | number[] | boolean,
+    label?: string
+  ): ResultEvent => ({
+    type: 'result',
+    resultType,
+    value,
+    label,
   }),
 };
