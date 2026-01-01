@@ -84,8 +84,17 @@ export interface ModeData {
   range: { lo: number; hi: number };
 }
 
+export interface VotingData {
+  candidate: number | null;
+  count: number;
+  phase: 'finding' | 'verifying' | 'result';
+  verifyCount?: number;
+  threshold?: number;
+  isMajority?: boolean;
+}
+
 export interface AuxiliaryState {
-  type: 'buckets' | 'heap' | 'count' | 'merge' | 'insertion' | 'gap' | 'partition' | 'runs' | 'mode';
+  type: 'buckets' | 'heap' | 'count' | 'merge' | 'insertion' | 'gap' | 'partition' | 'runs' | 'mode' | 'voting';
   phase?: string;
   buckets?: BucketData[];
   heap?: { nodes: HeapNode[]; heapSize: number };
@@ -99,6 +108,7 @@ export interface AuxiliaryState {
   partitionData?: PartitionData;
   runData?: RunData;
   modeData?: ModeData;
+  votingData?: VotingData;
 }
 
 export interface BaseEvent {

@@ -20,6 +20,13 @@ import { arrayOperations } from './arrays/arrayOperations';
 import { twoPointers } from './arrays/twoPointers';
 import { slidingWindow } from './arrays/slidingWindow';
 import { prefixSum } from './arrays/prefixSum';
+import { kadanes } from './arrays/kadanes';
+import { dutchNationalFlag } from './arrays/dutchNationalFlag';
+import { mooresVoting } from './arrays/mooresVoting';
+import { mergeSortedArrays } from './arrays/mergeSortedArrays';
+import { rotateArray } from './arrays/rotateArray';
+import { arrayRearrangement } from './arrays/arrayRearrangement';
+import { nextPermutation } from './arrays/nextPermutation';
 
 /**
  * Registry of all available algorithms
@@ -74,6 +81,14 @@ registerAlgorithm(arrayOperations);
 registerAlgorithm(twoPointers);
 registerAlgorithm(slidingWindow);
 registerAlgorithm(prefixSum);
+// Tier 3: Classic Algorithms
+registerAlgorithm(kadanes);
+registerAlgorithm(dutchNationalFlag);
+registerAlgorithm(mooresVoting);
+registerAlgorithm(mergeSortedArrays);
+registerAlgorithm(rotateArray);
+registerAlgorithm(arrayRearrangement);
+registerAlgorithm(nextPermutation);
 
 // ============ SORTING ============
 // Tier 1: Fundamentals
