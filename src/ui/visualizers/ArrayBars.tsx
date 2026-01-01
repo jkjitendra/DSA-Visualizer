@@ -35,6 +35,10 @@ const markColors: Record<string, { bg: string; border: string }> = {
     bg: "var(--color-primary-500)",
     border: "var(--color-primary-500)",
   },
+  window: {
+    bg: "var(--color-secondary-500)",
+    border: "var(--color-secondary-500)",
+  },
 };
 
 const defaultColor = {

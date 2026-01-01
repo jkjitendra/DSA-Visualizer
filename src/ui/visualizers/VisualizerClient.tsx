@@ -316,19 +316,27 @@ export function VisualizerClient({ initialAlgorithm, category }: VisualizerClien
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Legend - wrap on mobile */}
+          {/* Legend - context-aware based on algorithm type */}
           <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs ml-auto">
             <div className="flex items-center gap-1">
               <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm" style={{ background: "var(--color-accent-compare)" }} />
               <span className="text-[var(--text-secondary)]">{t("visualizer.comparing")}</span>
             </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm" style={{ background: "var(--color-accent-swap)" }} />
-              <span className="text-[var(--text-secondary)]">{t("visualizer.swapping")}</span>
-            </div>
+            {/* Show Window legend for sliding window/prefix sum, Swapping for sorting */}
+            {(selectedAlgorithm === 'sliding-window' || selectedAlgorithm === 'prefix-sum') ? (
+              <div className="flex items-center gap-1">
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm" style={{ background: "var(--color-secondary-500)" }} />
+                <span className="text-[var(--text-secondary)]">Window</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1">
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm" style={{ background: "var(--color-accent-swap)" }} />
+                <span className="text-[var(--text-secondary)]">{t("visualizer.swapping")}</span>
+              </div>
+            )}
             <div className="flex items-center gap-1">
               <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-sm" style={{ background: "var(--color-accent-sorted)" }} />
-              <span className="text-[var(--text-secondary)]">{t("visualizer.sorted")}</span>
+              <span className="text-[var(--text-secondary)]">{selectedAlgorithm === 'sliding-window' || selectedAlgorithm === 'prefix-sum' ? 'Result' : t("visualizer.sorted")}</span>
             </div>
           </div>
 
@@ -475,19 +483,57 @@ export function VisualizerClient({ initialAlgorithm, category }: VisualizerClien
         {/* Variables Panel */}
         <VariablesPanel variables={variables} expression={expression} />
 
-        {/* Output Array - Show when finished */}
+        {/* Output Panel - Show when finished */}
         {status === 'finished' && (
           <div className="p-4 rounded-xl bg-[var(--bg-card)] border border-green-500/50">
             <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2 flex items-center gap-2">
               <span className="text-green-500">✓</span>
-              Output Array
+              {selectedAlgorithm === 'sliding-window' ? (
+                <>Maximum sum: {auxiliaryState?.countArray?.reduce((sum, item) => sum + item.count, 0) || 0} at indices [{auxiliaryState?.countArray?.[0]?.index ?? 0}..{(auxiliaryState?.countArray?.[0]?.index ?? 0) + (auxiliaryState?.countArray?.length ?? 1) - 1}]</>
+              ) : selectedAlgorithm === 'two-pointers' ? (
+                'Two Pointers Result'
+              ) : selectedAlgorithm === 'prefix-sum' && auxiliaryState?.countArray ? (
+                <>Range sum: {auxiliaryState.countArray.reduce((sum, item) => sum + item.count, 0)} at indices [{auxiliaryState.countArray[0]?.index ?? 0}..{(auxiliaryState.countArray[0]?.index ?? 0) + auxiliaryState.countArray.length - 1}]</>
+              ) : (
+                'Output Array'
+              )}
             </h3>
-            <div className="font-mono text-sm text-[var(--color-primary-500)] bg-[var(--bg-secondary)] rounded-lg p-2 break-all">
-              [{arrayState.join(', ')}]
-            </div>
-            <p className="text-xs text-[var(--text-tertiary)] mt-2">
-              {arrayState.length} elements
-            </p>
+            {(selectedAlgorithm === 'sliding-window' || selectedAlgorithm === 'prefix-sum') && auxiliaryState?.countArray ? (
+              <>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-[var(--text-secondary)]">Indices:</span>
+                    <span className="font-mono text-sm text-[var(--color-primary-500)] bg-[var(--bg-secondary)] rounded px-2 py-0.5">
+                      [{auxiliaryState.countArray[0]?.index ?? 0}..{(auxiliaryState.countArray[0]?.index ?? 0) + auxiliaryState.countArray.length - 1}]
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-[var(--text-secondary)]">Elements:</span>
+                    <span className="font-mono text-sm text-[var(--color-secondary-500)] bg-[var(--bg-secondary)] rounded px-2 py-0.5">
+                      [{auxiliaryState.countArray.map(item => item.count).join(', ')}]
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-[var(--text-secondary)]">{selectedAlgorithm === 'sliding-window' ? 'Max Sum:' : 'Range Sum:'}</span>
+                    <span className="font-mono text-sm font-bold text-[var(--color-accent-sorted)] bg-[var(--bg-secondary)] rounded px-2 py-0.5">
+                      {auxiliaryState.countArray.map(item => item.count).join(' + ')} = {auxiliaryState.countArray.reduce((sum, item) => sum + item.count, 0)}
+                    </span>
+                  </div>
+                </div>
+                <p className="text-xs text-[var(--text-tertiary)] mt-2">
+                  {auxiliaryState.countArray.length} elements in {selectedAlgorithm === 'sliding-window' ? 'window' : 'range'}
+                </p>
+              </>
+            ) : (
+              <>
+                <div className="font-mono text-sm text-[var(--color-primary-500)] bg-[var(--bg-secondary)] rounded-lg p-2 break-all">
+                  [{arrayState.join(', ')}]
+                </div>
+                <p className="text-xs text-[var(--text-tertiary)] mt-2">
+                  {arrayState.length} elements
+                </p>
+              </>
+            )}
           </div>
         )}
       </div>

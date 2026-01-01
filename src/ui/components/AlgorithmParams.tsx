@@ -1,7 +1,74 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { AlgorithmParameter } from "@/core/algorithms/IAlgorithm";
+
+interface NumberInputProps {
+  min: number;
+  max: number;
+  step: number;
+  value: number;
+  defaultValue: number;
+  onChange: (value: number) => void;
+}
+
+/**
+ * Custom number input that allows clearing the field completely
+ * before entering a new value. Uses local string state while editing.
+ */
+function NumberInput({ min, max, step, value, defaultValue, onChange }: NumberInputProps) {
+  // Use string state to allow empty input while typing
+  const [localValue, setLocalValue] = useState<string>(value.toString());
+  const [isFocused, setIsFocused] = useState(false);
+
+  // Sync with external value when not focused
+  const displayValue = isFocused ? localValue : value.toString();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setLocalValue(newValue);
+
+    // If it's a valid number, update parent immediately
+    const parsed = parseInt(newValue);
+    if (!isNaN(parsed) && parsed >= min && parsed <= max) {
+      onChange(parsed);
+    }
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+    // On blur, if empty or invalid, reset to default
+    const parsed = parseInt(localValue);
+    if (isNaN(parsed) || localValue === '') {
+      setLocalValue(defaultValue.toString());
+      onChange(defaultValue);
+    } else {
+      // Clamp to min/max
+      const clamped = Math.min(max, Math.max(min, parsed));
+      setLocalValue(clamped.toString());
+      onChange(clamped);
+    }
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+    setLocalValue(value.toString());
+  };
+
+  return (
+    <input
+      type="number"
+      min={min}
+      max={max}
+      step={step}
+      value={displayValue}
+      onChange={handleChange}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      className="w-20 px-2 py-1 text-sm font-mono bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-[var(--color-primary-500)]"
+    />
+  );
+}
 
 interface AlgorithmParamsProps {
   parameters: AlgorithmParameter[];
@@ -31,14 +98,13 @@ export function AlgorithmParams({ parameters, values, onChange }: AlgorithmParam
             </label>
 
             {param.type === 'number' && (
-              <input
-                type="number"
+              <NumberInput
                 min={param.min}
                 max={param.max}
                 step={param.step || 1}
                 value={values[param.id] as number ?? param.default}
-                onChange={(e) => handleChange(param.id, parseInt(e.target.value) || param.default)}
-                className="w-20 px-2 py-1 text-sm font-mono bg-[var(--bg-secondary)] border border-[var(--border-primary)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary-500)] focus:border-[var(--color-primary-500)]"
+                defaultValue={param.default}
+                onChange={(val) => handleChange(param.id, val)}
               />
             )}
 
@@ -60,7 +126,7 @@ export function AlgorithmParams({ parameters, values, onChange }: AlgorithmParam
       </div>
 
       <p className="text-xs text-[var(--text-tertiary)] mt-3">
-        💡 Change parameters and click "Apply & Run" to see the effect
+        💡 Change parameters and click &quot;Apply &amp; Run&quot; to see the effect
       </p>
     </div>
   );
