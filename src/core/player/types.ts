@@ -53,6 +53,12 @@ export interface AlgorithmSnapshot {
   expression?: string;
   // Algorithm-specific visualization state
   auxiliaryState?: AuxiliaryState;
+  // Algorithm result (for displaying output)
+  result?: {
+    type: 'string' | 'indices' | 'boolean' | 'frequency';
+    value: string | number[] | boolean;
+    label?: string;
+  };
 }
 
 /**

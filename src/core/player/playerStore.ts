@@ -113,6 +113,14 @@ const applyEvent = (
       newSnapshot.auxiliaryState = event.state;
       break;
 
+    case 'result':
+      newSnapshot.result = {
+        type: event.resultType,
+        value: event.value,
+        label: event.label,
+      };
+      break;
+
     default:
       break;
   }
