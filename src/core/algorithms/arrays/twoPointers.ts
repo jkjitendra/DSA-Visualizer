@@ -88,12 +88,24 @@ export const twoPointers: IAlgorithm<ArrayInput> = {
     );
     yield createEvent.highlight([0]);
 
-    // Check if array was sorted
+    // Check if array was sorted - if not, update the visualization to show sorted array
     const wasSorted = JSON.stringify(input.values) === JSON.stringify(arr);
     if (!wasSorted) {
       yield createEvent.message(
-        `Note: Array sorted first for two-pointer approach`,
+        `Two Pointers requires a SORTED array. Sorting the input first...`,
+        'step'
+      );
+      yield createEvent.message(
+        `Original: [${input.values.join(', ')}] → Sorted: [${arr.join(', ')}]`,
         'explanation'
+      );
+      // Update the array state to show the sorted array
+      for (let i = 0; i < n; i++) {
+        yield createEvent.set(i, arr[i], input.values[i]);
+      }
+      yield createEvent.message(
+        `Array is now sorted. Starting two-pointer search...`,
+        'step'
       );
     }
 

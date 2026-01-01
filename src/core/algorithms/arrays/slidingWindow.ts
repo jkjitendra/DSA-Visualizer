@@ -91,16 +91,20 @@ export const slidingWindow: IAlgorithm<ArrayInput> = {
     );
 
     let windowSum = 0;
+    // Mark all initial window elements with 'window' type (cyan color)
+    for (let i = 0; i < k; i++) {
+      yield createEvent.mark([i], 'window');
+    }
+
     for (let i = 0; i < k; i++) {
       yield createEvent.pointer(
-        [{ index: i, label: 'i', color: 'var(--color-primary-500)' }],
+        [{ index: i, label: 'i', color: 'var(--color-secondary-500)' }],
         [
           { name: 'i', value: i },
           { name: 'arr[i]', value: arr[i], highlight: true },
           { name: 'windowSum', value: windowSum },
         ]
       );
-      yield createEvent.mark([i], 'current');
       windowSum += arr[i];
       yield createEvent.message(`Adding arr[${i}] = ${arr[i]}, windowSum = ${windowSum}`, 'explanation');
     }
@@ -111,15 +115,10 @@ export const slidingWindow: IAlgorithm<ArrayInput> = {
     yield createEvent.highlight([3]);
     yield createEvent.message(`Initial window sum: ${windowSum}`, 'step');
 
-    // Mark initial window
-    for (let i = 0; i < k; i++) {
-      yield createEvent.mark([i], 'selected');
-    }
-
     yield createEvent.pointer(
       [
-        { index: 0, label: 'start', color: 'var(--color-accent-sorted)' },
-        { index: k - 1, label: 'end', color: 'var(--color-accent-sorted)' },
+        { index: 0, label: 'start', color: 'var(--color-secondary-500)' },
+        { index: k - 1, label: 'end', color: 'var(--color-secondary-500)' },
       ],
       [
         { name: 'windowSum', value: windowSum, highlight: true },
@@ -145,12 +144,15 @@ export const slidingWindow: IAlgorithm<ArrayInput> = {
       yield createEvent.pointer(
         [
           { index: i - k, label: 'remove', color: 'var(--color-accent-swap)' },
-          { index: i, label: 'add', color: 'var(--color-accent-sorted)' },
+          { index: i, label: 'add', color: 'var(--color-secondary-500)' },
         ],
         [
+          { name: 'i', value: i },
+          { name: 'arr[i]', value: newElement, highlight: true },
+          { name: 'windowSum', value: windowSum },
+          { name: 'maxSum', value: maxSum },
           { name: 'removing', value: oldElement },
           { name: 'adding', value: newElement, highlight: true },
-          { name: 'windowSum', value: windowSum },
         ],
         `${windowSum} + ${newElement} - ${oldElement}`
       );
@@ -162,19 +164,23 @@ export const slidingWindow: IAlgorithm<ArrayInput> = {
         'explanation'
       );
 
-      // Mark current window
+      // Mark current window with 'window' type (cyan color - distinct from solution)
       for (let j = windowStart; j <= i; j++) {
-        yield createEvent.mark([j], 'selected');
+        yield createEvent.mark([j], 'window');
       }
 
       yield createEvent.pointer(
         [
-          { index: windowStart, label: 'start', color: 'var(--color-primary-500)' },
+          { index: windowStart, label: 'start', color: 'var(--color-secondary-500)' },
           { index: i, label: 'end', color: 'var(--color-secondary-500)' },
         ],
         [
+          { name: 'i', value: i },
+          { name: 'arr[i]', value: newElement, highlight: true },
           { name: 'windowSum', value: windowSum, highlight: true },
           { name: 'maxSum', value: maxSum },
+          { name: 'removing', value: oldElement },
+          { name: 'adding', value: newElement, highlight: true },
         ]
       );
 
@@ -189,7 +195,7 @@ export const slidingWindow: IAlgorithm<ArrayInput> = {
       }
     }
 
-    // Highlight final best window
+    // Highlight final best window (green = solution)
     for (let j = 0; j < n; j++) {
       yield createEvent.unmark([j]);
     }
@@ -197,11 +203,30 @@ export const slidingWindow: IAlgorithm<ArrayInput> = {
       yield createEvent.mark([j], 'sorted');
     }
 
+    // Get the elements of the maximum sum window
+    const maxWindowElements = arr.slice(maxStart, maxStart + k);
+
     yield createEvent.highlight([11]);
     yield createEvent.pointer([], []);
+
+    // Show detailed result with auxiliary state for output panel
+    yield createEvent.auxiliary({
+      type: 'count',
+      phase: `Maximum sum: ${maxSum} at indices [${maxStart}..${maxStart + k - 1}]`,
+      countArray: maxWindowElements.map((val, idx) => ({
+        index: maxStart + idx,
+        count: val,
+        highlight: true,
+      })),
+    });
+
     yield createEvent.message(
       `Maximum sum: ${maxSum} at indices [${maxStart}..${maxStart + k - 1}]`,
       'info'
+    );
+    yield createEvent.message(
+      `Elements: [${maxWindowElements.join(', ')}] = ${maxWindowElements.join(' + ')} = ${maxSum}`,
+      'explanation'
     );
   },
 };

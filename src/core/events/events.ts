@@ -133,7 +133,7 @@ export interface VisitEvent extends BaseEvent {
 export interface MarkEvent extends BaseEvent {
   type: 'mark';
   indices: number[];
-  markType: 'sorted' | 'pivot' | 'current' | 'minimum' | 'maximum' | 'selected';
+  markType: 'sorted' | 'pivot' | 'current' | 'minimum' | 'maximum' | 'selected' | 'window';
 }
 
 export interface UnmarkEvent extends BaseEvent {

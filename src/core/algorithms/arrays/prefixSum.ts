@@ -150,13 +150,14 @@ export const prefixSum: IAlgorithm<ArrayInput> = {
       });
     }
 
-    yield createEvent.mark([...Array(n).keys()], 'sorted');
+    // Don't mark all elements as 'sorted' - it's confusing since prefix sum doesn't sort
     yield createEvent.message(`Prefix sum array built!`, 'step');
 
-    // Show complete prefix array
+    // Show complete prefix array with all elements highlighted briefly
     const finalCountArray = prefix.map((val, idx) => ({
       index: idx,
       count: val,
+      highlight: true,
     }));
     yield createEvent.auxiliary({
       type: 'count',
@@ -176,10 +177,15 @@ export const prefixSum: IAlgorithm<ArrayInput> = {
       yield createEvent.unmark([i]);
     }
 
-    // Highlight query range
+    // Highlight query range with 'window' mark (cyan - more visible)
     for (let i = queryLeft; i <= queryRight; i++) {
-      yield createEvent.mark([i], 'selected');
+      yield createEvent.mark([i], 'window');
     }
+
+    yield createEvent.message(
+      `Querying sum of elements from index ${queryLeft} to ${queryRight}...`,
+      'explanation'
+    );
 
     let rangeSum: number;
     if (queryLeft === 0) {
@@ -230,15 +236,38 @@ export const prefixSum: IAlgorithm<ArrayInput> = {
       countArray: queryCountArray,
     });
 
-    // Final result
+    // Clear window marks and show final result with 'sorted' (green)
+    for (let i = 0; i < n; i++) {
+      yield createEvent.unmark([i]);
+    }
     for (let i = queryLeft; i <= queryRight; i++) {
       yield createEvent.mark([i], 'sorted');
     }
+
+    // Get the actual elements being summed
+    const queryElements = arr.slice(queryLeft, queryRight + 1);
+
+    // Send final result via auxiliary state for output panel
+    yield createEvent.auxiliary({
+      type: 'count',
+      phase: `Range sum: ${rangeSum} for indices [${queryLeft}..${queryRight}]`,
+      countArray: queryElements.map((val, idx) => ({
+        index: queryLeft + idx,
+        count: val,
+        highlight: true,
+      })),
+    });
 
     yield createEvent.pointer([], []);
     yield createEvent.message(
       `Sum of arr[${queryLeft}..${queryRight}] = ${rangeSum} ✓`,
       'info'
+    );
+
+    // Show the actual elements being summed
+    yield createEvent.message(
+      `Elements: [${queryElements.join(', ')}] = ${queryElements.join(' + ')} = ${rangeSum}`,
+      'explanation'
     );
   },
 };
