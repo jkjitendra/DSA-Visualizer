@@ -10,7 +10,7 @@ export type ValidationResult =
 /**
  * Parameter types for algorithm configuration
  */
-export type AlgorithmParameterType = 'number' | 'select';
+export type AlgorithmParameterType = 'number' | 'select' | 'text';
 
 export interface NumberParameter {
   type: 'number';
@@ -30,7 +30,16 @@ export interface SelectParameter {
   options: { value: string; label: string }[];
 }
 
-export type AlgorithmParameter = NumberParameter | SelectParameter;
+export interface TextParameter {
+  type: 'text';
+  id: string;
+  label: string;
+  default: string;
+  placeholder?: string;
+  maxLength?: number;
+}
+
+export type AlgorithmParameter = NumberParameter | SelectParameter | TextParameter;
 
 /**
  * Algorithm interface - all algorithms must implement this
