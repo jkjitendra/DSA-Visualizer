@@ -161,8 +161,52 @@ export interface DPTableState {
   maxCell?: { row: number; col: number };
 }
 
+// Matrix visualization for 2D search algorithms
+export interface MatrixCell {
+  row: number;
+  col: number;
+  value: number;
+  highlight?: 'current' | 'found' | 'eliminated' | 'search-range';
+}
+
+export interface MatrixSearchState {
+  matrix: number[][];
+  rows: number;
+  cols: number;
+  currentRow?: number;
+  currentCol?: number;
+  searchRegion?: {
+    rowStart: number;
+    rowEnd: number;
+    colStart: number;
+    colEnd: number;
+  };
+  foundCell?: { row: number; col: number };
+  eliminatedCells?: { row: number; col: number }[];
+}
+
+// Search algorithm visualization state
+export interface SearchRangeData {
+  arrayLength: number;
+  low: number;
+  high: number;
+  mid?: number;
+  mid1?: number;  // For ternary search
+  mid2?: number;  // For ternary search
+  target: number;
+  currentValue?: number;
+  eliminated?: { start: number; end: number }[];
+  algorithm?: string;
+  comparisons?: number;
+  // Algorithm-specific data
+  jumpBlock?: number;  // For jump search
+  probePosition?: number;  // For interpolation search
+  fibNumbers?: number[];  // For fibonacci search
+  exponentialRange?: number[];  // For exponential search
+}
+
 export interface AuxiliaryState {
-  type: 'buckets' | 'heap' | 'count' | 'merge' | 'insertion' | 'gap' | 'partition' | 'runs' | 'mode' | 'voting' | 'string-chars' | 'frequency' | 'lps' | 'hash' | 'dp-table';
+  type: 'buckets' | 'heap' | 'count' | 'merge' | 'insertion' | 'gap' | 'partition' | 'runs' | 'mode' | 'voting' | 'string-chars' | 'frequency' | 'lps' | 'hash' | 'dp-table' | 'matrix' | 'search-range';
   phase?: string;
   buckets?: BucketData[];
   heap?: { nodes: HeapNode[]; heapSize: number };
@@ -183,6 +227,9 @@ export interface AuxiliaryState {
   lpsState?: LPSState;
   hashState?: HashState;
   dpTableState?: DPTableState;
+  matrixSearchState?: MatrixSearchState;
+  // Search range state for search algorithms
+  searchRangeData?: SearchRangeData;
 }
 
 export interface BaseEvent {
@@ -280,8 +327,8 @@ export interface AuxiliaryEvent extends BaseEvent {
 
 export interface ResultEvent extends BaseEvent {
   type: 'result';
-  resultType: 'string' | 'indices' | 'boolean' | 'frequency';
-  value: string | number[] | boolean;
+  resultType: 'string' | 'indices' | 'boolean' | 'frequency' | 'search';
+  value: string | number[] | boolean | number;
   label?: string;
 }
 
@@ -390,8 +437,8 @@ export const createEvent = {
   }),
 
   result: (
-    resultType: 'string' | 'indices' | 'boolean' | 'frequency',
-    value: string | number[] | boolean,
+    resultType: 'string' | 'indices' | 'boolean' | 'frequency' | 'search',
+    value: string | number[] | boolean | number,
     label?: string
   ): ResultEvent => ({
     type: 'result',
