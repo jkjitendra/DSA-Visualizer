@@ -1,5 +1,5 @@
 /**
- * Core data models for DSA Visualizer
+ * Core data models for Algo Arcade Lab
  * These are canonical representations used across parsers, generators, and algorithms
  */
 
