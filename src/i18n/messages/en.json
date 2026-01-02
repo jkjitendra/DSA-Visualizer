@@ -1,6 +1,6 @@
 {
   "app": {
-    "name": "DSA Visualizer",
+    "name": "Algo Arcade Lab",
     "tagline": "Learn Data Structures & Algorithms Visually",
     "description": "Interactive visualizations to help you master DSA concepts"
   },
@@ -19,14 +19,14 @@
     "searching": "Searching",
     "stacks": "Stacks",
     "queues": "Queues",
-    "linkedLists": "Linked Lists",
+    "linked-lists": "Linked Lists",
     "recursion": "Recursion",
     "trees": "Trees",
     "heaps": "Heaps",
     "hashing": "Hashing",
     "graphs": "Graphs",
-    "dynamicProgramming": "Dynamic Programming",
-    "greedy": "Greedy Algorithms"
+    "dynamic-programming": "Dynamic Programming",
+    "greedy-algorithms": "Greedy Algorithms"
   },
   "player": {
     "play": "Play",

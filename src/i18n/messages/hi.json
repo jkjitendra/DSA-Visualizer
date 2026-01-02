@@ -19,14 +19,14 @@
     "searching": "सर्चिंग",
     "stacks": "स्टैक",
     "queues": "क्यू",
-    "linkedLists": "लिंक्ड लिस्ट",
+    "linked-lists": "लिंक्ड लिस्ट",
     "recursion": "रिकर्शन",
     "trees": "ट्री",
     "heaps": "हीप",
     "hashing": "हैशिंग",
     "graphs": "ग्राफ",
-    "dynamicProgramming": "डायनामिक प्रोग्रामिंग",
-    "greedy": "ग्रीडी एल्गोरिदम"
+    "dynamic-programming": "डायनामिक प्रोग्रामिंग",
+    "greedy-algorithms": "ग्रीडी एल्गोरिदम"
   },
   "player": {
     "play": "चलाएं",
