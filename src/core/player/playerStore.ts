@@ -189,6 +189,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => {
     snapshots: [],
     inputArray: [],
     currentSnapshot: null,
+    validationError: null,
 
     // Actions
     play: () => {
@@ -312,15 +313,19 @@ export const usePlayerStore = create<PlayerStore>((set, get) => {
       const algorithm = getAlgorithm(algorithmId);
       if (!algorithm) {
         console.error(`Algorithm ${algorithmId} not found`);
+        set({ validationError: `Algorithm ${algorithmId} not found` });
         return;
       }
 
       // Validate input
       const validation = algorithm.validate({ values: input });
       if (!validation.ok) {
-        console.error('Invalid input:', validation.error);
+        set({ validationError: validation.error || 'Invalid input' });
         return;
       }
+
+      // Clear any previous validation errors
+      set({ validationError: null });
 
       // Collect all events (pass params to run)
       const events: AlgoEvent[] = [];
@@ -350,6 +355,10 @@ export const usePlayerStore = create<PlayerStore>((set, get) => {
 
     getTotalSteps: () => {
       return get().snapshots.length - 1;
+    },
+
+    clearError: () => {
+      set({ validationError: null });
     },
   };
 });

@@ -55,8 +55,8 @@ export interface AlgorithmSnapshot {
   auxiliaryState?: AuxiliaryState;
   // Algorithm result (for displaying output)
   result?: {
-    type: 'string' | 'indices' | 'boolean' | 'frequency';
-    value: string | number[] | boolean;
+    type: 'string' | 'indices' | 'boolean' | 'frequency' | 'search';
+    value: string | number[] | boolean | number;
     label?: string;
   };
 }
@@ -81,6 +81,9 @@ export interface PlayerState {
 
   // Current visual state (derived from snapshot)
   currentSnapshot: AlgorithmSnapshot | null;
+
+  // Validation error message
+  validationError: string | null;
 }
 
 /**
@@ -101,6 +104,7 @@ export interface PlayerActions {
 
   // Algorithm setup
   loadAlgorithm: (algorithmId: string, input: number[], params?: Record<string, number | string>) => void;
+  clearError: () => void;
 
   // Derived state helpers
   getProgress: () => number;
