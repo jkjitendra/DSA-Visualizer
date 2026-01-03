@@ -101,5 +101,195 @@
         "description": "Learn in your preferred language with full i18n support"
       }
     }
+  },
+  "pages": {
+    "contact": {
+      "title": "Get in Touch",
+      "subtitle": "Have questions about Algo Arcade Lab? We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+      "formTitle": "Send us a Message",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "subject": "Subject",
+      "message": "Message",
+      "sendButton": "Send Message",
+      "contactInfo": "Contact Information",
+      "emailLabel": "Email",
+      "locationLabel": "Location",
+      "location": "India",
+      "responseTime": "Response Time",
+      "responseTimeText": "We typically respond within 24-48 hours",
+      "quickHelp": "Looking for Quick Help?",
+      "quickHelpText": "Check out our FAQ section for answers to common questions about pricing, features, and getting started.",
+      "visitFaq": "Visit FAQ Section"
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "lastUpdated": "Last updated: January 2026",
+      "infoCollect": "Information We Collect",
+      "infoCollectText": "We collect information you provide directly to us, including:",
+      "infoCollectItems": [
+        "Account information (name, email address)",
+        "Payment information (processed securely via Stripe/Razorpay)",
+        "Usage data and preferences",
+        "Communications you send to us"
+      ],
+      "howWeUse": "How We Use Your Information",
+      "howWeUseText": "We use the information we collect to:",
+      "howWeUseItems": [
+        "Provide, maintain, and improve our services",
+        "Process transactions and send related information",
+        "Send you technical notices and support messages",
+        "Respond to your comments and questions",
+        "Analyze usage patterns to improve user experience"
+      ],
+      "dataSecurity": "Data Security",
+      "dataSecurityText": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. This includes:",
+      "dataSecurityItems": [
+        "Encryption of sensitive data in transit and at rest",
+        "Regular security assessments and updates",
+        "Limited access to personal information by employees",
+        "Secure payment processing through certified providers"
+      ],
+      "yourRights": "Your Rights",
+      "yourRightsText": "You have the right to:",
+      "yourRightsItems": [
+        "Access your personal information",
+        "Correct inaccurate or incomplete data",
+        "Request deletion of your data",
+        "Object to processing of your data",
+        "Data portability"
+      ],
+      "cookies": "Cookies & Tracking",
+      "cookiesText": "We use cookies and similar technologies to enhance your experience, analyze usage patterns, and deliver personalized content. You can control cookie preferences through your browser settings.",
+      "dataRetention": "Data Retention",
+      "dataRetentionText": "We retain your personal information for as long as your account is active or as needed to provide you services. We will also retain and use your information as necessary to comply with legal obligations and resolve disputes.",
+      "contactUs": "Contact Us",
+      "contactUsText": "If you have any questions about this Privacy Policy, please contact us at:",
+      "contactEmail": "privacy@algoarcadelab.com"
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "lastUpdated": "Last updated: January 2026",
+      "acceptance": "1. Acceptance of Terms",
+      "acceptanceText": "By accessing or using Algo Arcade Lab, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this platform.",
+      "account": "2. Account & Payment",
+      "accountText": "When you create an account or make a purchase, you agree to:",
+      "accountItems": [
+        "Provide accurate and complete information",
+        "Maintain the security of your account credentials",
+        "Accept responsibility for all activities under your account",
+        "Not share your account access with others"
+      ],
+      "accountNote": "All payments are processed securely through our payment partners (Stripe/Razorpay). Full Access is a one-time payment that grants lifetime access to all features.",
+      "license": "3. License & Usage Rights",
+      "licenseText": "Upon purchase, you are granted a non-exclusive, non-transferable license to:",
+      "licenseItems": [
+        "Access and use all algorithm visualizations and educational content",
+        "Use the code playground for personal learning and practice",
+        "Access future updates and new algorithms at no additional cost"
+      ],
+      "licenseNotText": "You may NOT:",
+      "licenseNotItems": [
+        "Redistribute, resell, or sublicense access to the platform",
+        "Copy or reproduce content for commercial purposes",
+        "Share account credentials or access with others",
+        "Attempt to reverse engineer or extract source code"
+      ],
+      "prohibited": "4. Prohibited Conduct",
+      "prohibitedText": "You agree not to engage in any of the following:",
+      "prohibitedItems": [
+        "Violating any applicable laws or regulations",
+        "Attempting to gain unauthorized access to our systems",
+        "Interfering with or disrupting the platform's operation",
+        "Uploading malicious code or content",
+        "Harassing or impersonating other users",
+        "Using automated systems to access the platform without permission"
+      ],
+      "disclaimer": "5. Disclaimer of Warranties",
+      "disclaimerText": "The platform is provided \"as is\" without warranties of any kind. We do not guarantee that the service will be uninterrupted, secure, or error-free. We are not responsible for any damages arising from your use of the platform.",
+      "changes": "6. Changes to Terms",
+      "changesText": "We reserve the right to modify these terms at any time. We will notify users of significant changes via email or through the platform. Continued use of the service after changes constitutes acceptance of the new terms.",
+      "contact": "7. Contact",
+      "contactText": "If you have any questions about these Terms of Service, please contact us at:",
+      "contactEmail": "legal@algoarcadelab.com"
+    },
+    "cancellation": {
+      "title": "Cancellation, Refund Policy & Terms",
+      "lastUpdated": "Last updated: January 2026",
+      "importantNotice": "Important Notice",
+      "importantNoticeText": "Please read this policy carefully before making a purchase. All payments made to Algo Arcade Lab are final and non-refundable.",
+      "noRefunds": "1. No Refunds on Opt-Out or Cancellation",
+      "refundPolicy": "Refund Policy",
+      "refundPolicyText": "Once a subscription has been purchased and activated, no refunds will be issued under any circumstances.",
+      "finalPayments": "Final Payments",
+      "finalPaymentsText": "All payments made towards Full Access, courses, or any other paid services are final and non-refundable.",
+      "serviceShutdown": "Service Shutdown",
+      "serviceShutdownText": "In the event of an unexpected or abrupt shutdown of services, Algo Arcade Lab shall not be obligated to provide refunds for any fees, subscriptions, or payments made by users. This includes, but is not limited to:",
+      "serviceShutdownItems": [
+        "Full Access subscription fees",
+        "Course payments",
+        "Any other paid offerings"
+      ],
+      "cancellationPolicy": "Cancellation Policy",
+      "cancellationPolicyText": "Cancellations or mid-term opt-outs are not permitted to ensure fairness and consistency for all users.",
+      "liability": "2. Limitation of Liability",
+      "liabilityText": "Algo Arcade Lab shall not be liable for any direct, indirect, incidental, consequential, or punitive damages that may arise from:",
+      "liabilityItems": [
+        "Use or inability to use the platform",
+        "Service interruptions",
+        "Abrupt shutdown or discontinuation of services"
+      ],
+      "liabilityNote": "This applies to all users, including those with active paid subscriptions.",
+      "optOut": "3. Subscription Opt-Out Notification",
+      "optOutText": "If a user voluntarily opts out of using the service after purchase, no refund will be issued for the remaining subscription period.",
+      "optOutNote": "The responsibility of subscription management rests with the user.",
+      "accountMisuse": "4. Multiple IP / Account Misuse",
+      "accountActivity": "Account Activity",
+      "accountActivityText": "Accounts exhibiting excessive or suspicious login activity, including access from an unusually high number of different IP addresses, may be:",
+      "accountActivityItems": [
+        "Flagged",
+        "Restricted",
+        "Suspended without refund"
+      ],
+      "protectionMeasure": "Protection Measure",
+      "protectionMeasureText": "This measure protects the platform from shared account misuse and unauthorized access.",
+      "blacklist": "5. Blacklisted Accounts – Strict Actions",
+      "blacklistText": "Users found violating Terms & Conditions may be blacklisted. Consequences include:",
+      "blacklistItems": [
+        "Permanent suspension of the account",
+        "Loss of access to all associated services",
+        "Ineligibility for future enrollments or platform usage"
+      ],
+      "blacklistNote": "These actions are taken to maintain service integrity and user safety.",
+      "legalAction": "6. Legal Action for Severe Violations",
+      "legalActionText": "Algo Arcade Lab reserves the right to initiate legal proceedings against individuals or accounts involved in:",
+      "legalActionItems": [
+        "Fraudulent activities",
+        "Abuse or exploitation of the platform",
+        "Redistribution or unauthorized sharing of content",
+        "Any actions causing harm to the service, platform, or other users"
+      ],
+      "legalActionNote": "Such actions may involve reporting incidents to relevant authorities as permitted under applicable laws.",
+      "contactUs": "Contact Us",
+      "contactUsText": "If you have any questions about this Cancellation Policy, please contact us at:",
+      "contactEmail": "support@algoarcadelab.com"
+    },
+    "cheatsheet": {
+      "title": "Algorithm Cheatsheets",
+      "comingSoon": "Coming Soon",
+      "subtitle": "We're crafting comprehensive cheatsheets to help you quickly reference algorithms, time complexities, and key patterns during your coding interviews.",
+      "feature1Title": "Time & Space Complexity",
+      "feature1Text": "Quick reference for Big O notation of all algorithms",
+      "feature2Title": "Pattern Recognition",
+      "feature2Text": "Common problem patterns and when to use which approach",
+      "feature3Title": "Code Templates",
+      "feature3Text": "Ready-to-use code snippets in multiple languages",
+      "notifyTitle": "Get Notified When It's Ready",
+      "notifyText": "Join our waitlist to be the first to access our algorithm cheatsheets when they launch.",
+      "emailPlaceholder": "Enter your email",
+      "notifyButton": "Notify Me",
+      "backHome": "Back to Home"
+    }
   }
 }
