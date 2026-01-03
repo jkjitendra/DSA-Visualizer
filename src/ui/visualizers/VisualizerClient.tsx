@@ -5,9 +5,13 @@ import { useTranslations } from "next-intl";
 import { usePlayerStore } from "@/core/player";
 import { getAlgorithm, getAllAlgorithms } from "@/core/algorithms/registry";
 import { ArrayBars } from "@/ui/visualizers/ArrayBars";
+import { StringBars } from "@/ui/visualizers/StringBars";
 import { PlayerControls } from "@/ui/components/PlayerControls";
 import { CodePanel } from "@/ui/components/CodePanel";
 import { ArrayInputEditor } from "@/ui/components/ArrayInputEditor";
+import { StringInputEditor } from "@/ui/components/StringInputEditor";
+import { ParenthesesInputEditor } from "@/ui/components/ParenthesesInputEditor";
+import { ExpressionInputEditor } from "@/ui/components/ExpressionInputEditor";
 import { VariablesPanel } from "@/ui/components/VariablesPanel";
 import { CurrentOperation } from "@/ui/components/CurrentOperation";
 import { AlgorithmInfoCard } from "@/ui/components/AlgorithmInfoCard";
@@ -40,6 +44,48 @@ import { mergeSortedArraysInfo } from "@/core/algorithms/arrays/mergeSortedArray
 import { rotateArrayInfo } from "@/core/algorithms/arrays/rotateArrayInfo";
 import { arrayRearrangementInfo } from "@/core/algorithms/arrays/arrayRearrangementInfo";
 import { nextPermutationInfo } from "@/core/algorithms/arrays/nextPermutationInfo";
+// String algorithm info
+import { stringOperationsInfo } from "@/core/algorithms/strings/stringOperationsInfo";
+import { characterFrequencyInfo } from "@/core/algorithms/strings/characterFrequencyInfo";
+import { bruteForceSearchInfo } from "@/core/algorithms/strings/bruteForceSearchInfo";
+import { kmpAlgorithmInfo } from "@/core/algorithms/strings/kmpAlgorithmInfo";
+import { rabinKarpInfo } from "@/core/algorithms/strings/rabinKarpInfo";
+import { zAlgorithmInfo } from "@/core/algorithms/strings/zAlgorithmInfo";
+import { boyerMooreInfo } from "@/core/algorithms/strings/boyerMooreInfo";
+import { anagramDetectionInfo } from "@/core/algorithms/strings/anagramDetectionInfo";
+import { longestPalindromicSubstringInfo } from "@/core/algorithms/strings/longestPalindromicSubstringInfo";
+import { longestCommonSubstringInfo } from "@/core/algorithms/strings/longestCommonSubstringInfo";
+import { stringRotationInfo } from "@/core/algorithms/strings/stringRotationInfo";
+import { removeDuplicatesInfo } from "@/core/algorithms/strings/removeDuplicatesInfo";
+// Searching algorithm info
+import { linearSearchInfo } from "@/core/algorithms/searching/linearSearchInfo";
+import { sentinelLinearSearchInfo } from "@/core/algorithms/searching/sentinelLinearSearchInfo";
+import { bidirectionalSearchInfo } from "@/core/algorithms/searching/bidirectionalSearchInfo";
+import { binarySearchInfo } from "@/core/algorithms/searching/binarySearchInfo";
+import { lowerBoundInfo } from "@/core/algorithms/searching/lowerBoundInfo";
+import { upperBoundInfo } from "@/core/algorithms/searching/upperBoundInfo";
+import { searchInsertPositionInfo } from "@/core/algorithms/searching/searchInsertPositionInfo";
+import { peakElementInfo } from "@/core/algorithms/searching/peakElementInfo";
+import { rotatedArraySearchInfo } from "@/core/algorithms/searching/rotatedArraySearchInfo";
+import { rotatedArrayMinInfo } from "@/core/algorithms/searching/rotatedArrayMinInfo";
+import { jumpSearchInfo } from "@/core/algorithms/searching/jumpSearchInfo";
+import { interpolationSearchInfo } from "@/core/algorithms/searching/interpolationSearchInfo";
+import { exponentialSearchInfo } from "@/core/algorithms/searching/exponentialSearchInfo";
+import { fibonacciSearchInfo } from "@/core/algorithms/searching/fibonacciSearchInfo";
+import { ternarySearchInfo } from "@/core/algorithms/searching/ternarySearchInfo";
+import { matrixBinarySearchInfo } from "@/core/algorithms/searching/matrixBinarySearchInfo";
+// Stack algorithm info
+import { stackOperationsInfo } from "@/core/algorithms/stacks/stackOperationsInfo";
+import { balancedParenthesesInfo } from "@/core/algorithms/stacks/balancedParenthesesInfo";
+import { infixToPostfixInfo } from "@/core/algorithms/stacks/infixToPostfixInfo";
+import { infixToPrefixInfo } from "@/core/algorithms/stacks/infixToPrefixInfo";
+import { postfixEvaluationInfo } from "@/core/algorithms/stacks/postfixEvaluationInfo";
+import { prefixEvaluationInfo } from "@/core/algorithms/stacks/prefixEvaluationInfo";
+import { nextGreaterElementInfo } from "@/core/algorithms/stacks/nextGreaterElementInfo";
+import { nextSmallerElementInfo } from "@/core/algorithms/stacks/nextSmallerElementInfo";
+import { stockSpanInfo } from "@/core/algorithms/stacks/stockSpanInfo";
+import { largestRectangleHistogramInfo } from "@/core/algorithms/stacks/largestRectangleHistogramInfo";
+import { validStackSequencesInfo } from "@/core/algorithms/stacks/validStackSequencesInfo";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -71,6 +117,48 @@ const algorithmDefaultArrays: Record<string, number[]> = {
   "bucket-sort": [42, 7, 99, 15, 76, 38, 58, 12],
   "pigeonhole-sort": [8, 3, 6, 2, 7, 4, 5, 1],
   "heap-sort": [13, 44, 1, 22, 22, 4, 42, 8, 11],
+  // Strings topic (character codes for "ABCABABCABC")
+  "string-operations": [72, 69, 76, 76, 79, 87, 79, 82, 76, 68],  // "HELLOWORLD"
+  "character-frequency": [65, 66, 82, 65, 67, 65, 68, 65, 66, 82, 65],  // "ABRACADABRA"
+  "brute-force-search": [65, 66, 67, 65, 66, 65, 66, 67, 65, 66, 67],  // "ABCABABCABC"
+  "kmp-algorithm": [65, 66, 65, 66, 65, 66, 67, 65, 66, 65, 66],  // "ABABABCABAB"
+  "rabin-karp": [65, 66, 67, 68, 65, 66, 67, 69, 65, 66],  // "ABCDABCEAB"
+  "z-algorithm": [65, 65, 66, 65, 65, 66, 65, 65, 66],  // "AABAABAAB"
+  "boyer-moore": [65, 66, 67, 68, 69, 65, 66, 67, 68, 65, 66, 67],  // "ABCDEABCDABC"
+  "anagram-detection": [76, 73, 83, 84, 69, 78],  // "LISTEN"
+  "longest-palindromic-substring": [66, 65, 66, 65, 68],  // "BABAD"
+  "longest-common-substring": [65, 66, 67, 68, 69, 70],  // "ABCDEF"
+  "string-rotation": [65, 66, 67, 68, 69, 70],  // "ABCDEF"
+  "remove-duplicates": [80, 82, 79, 71, 82, 65, 77, 77, 73, 78, 71],  // "PROGRAMMING"
+  // Searching topic - sorted arrays for most
+  "linear-search": [3, 8, 12, 15, 22, 31, 45, 56, 78, 89],
+  "sentinel-linear-search": [3, 8, 12, 15, 22, 31, 45, 56, 78, 89],
+  "bidirectional-search": [3, 8, 12, 15, 22, 31, 45, 56, 78, 89],
+  "binary-search": [1, 3, 5, 7, 9, 11, 13, 15, 17, 19],
+  "lower-bound": [1, 2, 2, 2, 3, 4, 5, 5, 6, 7],
+  "upper-bound": [1, 2, 2, 2, 3, 4, 5, 5, 6, 7],
+  "search-insert-position": [1, 3, 5, 6, 8, 10, 12],
+  "peak-element": [1, 3, 8, 12, 4, 2],
+  "rotated-array-search": [4, 5, 6, 7, 0, 1, 2],
+  "rotated-array-min": [4, 5, 6, 7, 0, 1, 2, 3],
+  "jump-search": [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25],
+  "interpolation-search": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+  "exponential-search": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+  "fibonacci-search": [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25],
+  "ternary-search": [1, 3, 5, 7, 9, 11, 13, 15, 17, 19],
+  "matrix-binary-search": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+  // Stacks topic
+  "stack-operations": [5, 3, 8, 2, 7],
+  "balanced-parentheses": [40, 91, 123, 125, 93, 41],  // "([{}])"
+  "infix-to-postfix": [65, 43, 66, 42, 67],  // "A+B*C"
+  "infix-to-prefix": [65, 43, 66, 42, 67],  // "A+B*C"
+  "postfix-evaluation": [50, 51, 52, 42, 43],  // "234*+"
+  "prefix-evaluation": [43, 50, 42, 51, 52],  // "+2*34"
+  "next-greater-element": [4, 5, 2, 10, 8],
+  "next-smaller-element": [4, 8, 5, 2, 25],
+  "stock-span": [100, 80, 60, 70, 60, 75, 85],
+  "largest-rectangle-histogram": [2, 1, 5, 6, 2, 3],
+  "valid-stack-sequences": [1, 2, 3, 4, 5],
 };
 
 // Map algorithm IDs to their info
@@ -104,6 +192,48 @@ const algorithmInfoMap: Record<string, any> = {
   "pigeonhole-sort": pigeonholeSortInfo,
   "tim-sort": timSortInfo,
   "intro-sort": introSortInfo,
+  // Strings
+  "string-operations": stringOperationsInfo,
+  "character-frequency": characterFrequencyInfo,
+  "brute-force-search": bruteForceSearchInfo,
+  "kmp-algorithm": kmpAlgorithmInfo,
+  "rabin-karp": rabinKarpInfo,
+  "z-algorithm": zAlgorithmInfo,
+  "boyer-moore": boyerMooreInfo,
+  "anagram-detection": anagramDetectionInfo,
+  "longest-palindromic-substring": longestPalindromicSubstringInfo,
+  "longest-common-substring": longestCommonSubstringInfo,
+  "string-rotation": stringRotationInfo,
+  "remove-duplicates": removeDuplicatesInfo,
+  // Searching
+  "linear-search": linearSearchInfo,
+  "sentinel-linear-search": sentinelLinearSearchInfo,
+  "bidirectional-search": bidirectionalSearchInfo,
+  "binary-search": binarySearchInfo,
+  "lower-bound": lowerBoundInfo,
+  "upper-bound": upperBoundInfo,
+  "search-insert-position": searchInsertPositionInfo,
+  "peak-element": peakElementInfo,
+  "rotated-array-search": rotatedArraySearchInfo,
+  "rotated-array-min": rotatedArrayMinInfo,
+  "jump-search": jumpSearchInfo,
+  "interpolation-search": interpolationSearchInfo,
+  "exponential-search": exponentialSearchInfo,
+  "fibonacci-search": fibonacciSearchInfo,
+  "ternary-search": ternarySearchInfo,
+  "matrix-binary-search": matrixBinarySearchInfo,
+  // Stacks
+  "stack-operations": stackOperationsInfo,
+  "balanced-parentheses": balancedParenthesesInfo,
+  "infix-to-postfix": infixToPostfixInfo,
+  "infix-to-prefix": infixToPrefixInfo,
+  "postfix-evaluation": postfixEvaluationInfo,
+  "prefix-evaluation": prefixEvaluationInfo,
+  "next-greater-element": nextGreaterElementInfo,
+  "next-smaller-element": nextSmallerElementInfo,
+  "stock-span": stockSpanInfo,
+  "largest-rectangle-histogram": largestRectangleHistogramInfo,
+  "valid-stack-sequences": validStackSequencesInfo,
 };
 
 // Map algorithm IDs to their category
@@ -134,6 +264,48 @@ const algorithmCategoryMap: Record<string, string> = {
   "pigeonhole-sort": "sorting",
   "tim-sort": "sorting",
   "intro-sort": "sorting",
+  // Strings
+  "string-operations": "strings",
+  "character-frequency": "strings",
+  "brute-force-search": "strings",
+  "kmp-algorithm": "strings",
+  "rabin-karp": "strings",
+  "z-algorithm": "strings",
+  "boyer-moore": "strings",
+  "anagram-detection": "strings",
+  "longest-palindromic-substring": "strings",
+  "longest-common-substring": "strings",
+  "string-rotation": "strings",
+  "remove-duplicates": "strings",
+  // Searching
+  "linear-search": "searching",
+  "sentinel-linear-search": "searching",
+  "bidirectional-search": "searching",
+  "binary-search": "searching",
+  "lower-bound": "searching",
+  "upper-bound": "searching",
+  "search-insert-position": "searching",
+  "peak-element": "searching",
+  "rotated-array-search": "searching",
+  "rotated-array-min": "searching",
+  "jump-search": "searching",
+  "interpolation-search": "searching",
+  "exponential-search": "searching",
+  "fibonacci-search": "searching",
+  "ternary-search": "searching",
+  "matrix-binary-search": "searching",
+  // Stacks
+  "stack-operations": "stacks",
+  "balanced-parentheses": "stacks",
+  "infix-to-postfix": "stacks",
+  "infix-to-prefix": "stacks",
+  "postfix-evaluation": "stacks",
+  "prefix-evaluation": "stacks",
+  "next-greater-element": "stacks",
+  "next-smaller-element": "stacks",
+  "stock-span": "stacks",
+  "largest-rectangle-histogram": "stacks",
+  "valid-stack-sequences": "stacks",
 };
 
 interface VisualizerClientProps {
@@ -144,7 +316,7 @@ interface VisualizerClientProps {
 export function VisualizerClient({ initialAlgorithm, category }: VisualizerClientProps) {
   const t = useTranslations();
 
-  const { currentSnapshot, loadAlgorithm, inputArray, algorithmId, status } =
+  const { currentSnapshot, loadAlgorithm, inputArray, algorithmId, status, validationError } =
     usePlayerStore();
 
   // Algorithm parameters state
@@ -156,11 +328,19 @@ export function VisualizerClient({ initialAlgorithm, category }: VisualizerClien
   const getDefaultAlgorithmForCategory = (cat?: string) => {
     if (cat === "arrays") return "array-operations";
     if (cat === "sorting") return "bubble-sort";
+    if (cat === "strings") return "string-operations";
+    if (cat === "searching") return "linear-search";
+    if (cat === "stacks") return "stack-operations";
     return "bubble-sort";
   };
 
   const selectedAlgorithm = algorithmId || initialAlgorithm || getDefaultAlgorithmForCategory(category);
-  const currentInputArray = inputArray.length > 0 ? inputArray : getDefaultArray(selectedAlgorithm);
+
+  // Check if this is a stack algorithm (allows empty arrays)
+  const isStackAlgorithm = algorithmCategoryMap[selectedAlgorithm] === 'stacks';
+
+  // For stack algorithms, allow empty arrays; for others, fall back to default
+  const currentInputArray = (inputArray.length > 0 || isStackAlgorithm) ? inputArray : getDefaultArray(selectedAlgorithm);
 
   const algorithm = getAlgorithm(selectedAlgorithm);
   const allAlgorithms = getAllAlgorithms();
@@ -188,8 +368,12 @@ export function VisualizerClient({ initialAlgorithm, category }: VisualizerClien
   const handleRun = () => {
     const state = usePlayerStore.getState();
     const algoId = state.algorithmId || "bubble-sort";
-    const input = state.inputArray.length > 0 ? state.inputArray : getDefaultArray(algoId);
-    if (input.length >= 2) {
+    const isStack = algorithmCategoryMap[algoId] === 'stacks';
+    const input = (state.inputArray.length > 0 || isStack) ? state.inputArray : getDefaultArray(algoId);
+
+    // Stack algorithms can have 0 elements, others need at least 2
+    const minRequired = isStack ? 0 : 2;
+    if (input.length >= minRequired) {
       loadAlgorithm(algoId, input, algorithmParams);
     }
   };
@@ -368,20 +552,61 @@ export function VisualizerClient({ initialAlgorithm, category }: VisualizerClien
 
         {/* MOBILE: Input Array after algorithm selector (< 1024px) */}
         <div className="lg:hidden p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-primary)]">
-          <ArrayInputEditor
-            value={currentInputArray}
-            onChange={handleInputChange}
-            onApply={() => handleRun()}
-            algorithmParams={
-              algorithm?.parameters && algorithm.parameters.length > 0 ? (
-                <AlgorithmParams
-                  parameters={algorithm.parameters}
-                  values={algorithmParams}
-                  onChange={setAlgorithmParams}
-                />
-              ) : undefined
-            }
-          />
+          {selectedAlgorithm === 'balanced-parentheses' ? (
+            <ParenthesesInputEditor
+              value={currentInputArray}
+              onChange={handleInputChange}
+              onApply={() => handleRun()}
+            />
+          ) : ['infix-to-postfix', 'infix-to-prefix', 'postfix-evaluation', 'prefix-evaluation'].includes(selectedAlgorithm) ? (
+            <ExpressionInputEditor
+              value={currentInputArray}
+              onChange={handleInputChange}
+              onApply={() => handleRun()}
+            />
+          ) : category === 'strings' || algorithmCategoryMap[selectedAlgorithm] === 'strings' ? (
+            <StringInputEditor
+              value={currentInputArray}
+              onChange={handleInputChange}
+              onApply={() => handleRun()}
+              algorithmParams={
+                algorithm?.parameters && algorithm.parameters.length > 0 ? (
+                  <AlgorithmParams
+                    parameters={algorithm.parameters}
+                    values={algorithmParams}
+                    onChange={setAlgorithmParams}
+                  />
+                ) : undefined
+              }
+            />
+          ) : (
+            <ArrayInputEditor
+              value={currentInputArray}
+              onChange={handleInputChange}
+              onApply={() => handleRun()}
+              algorithmId={selectedAlgorithm}
+              onParamsChange={(params) => setAlgorithmParams(prev => ({ ...prev, ...params }))}
+              algorithmParams={
+                algorithm?.parameters && algorithm.parameters.length > 0 ? (
+                  <AlgorithmParams
+                    parameters={algorithm.parameters}
+                    values={algorithmParams}
+                    onChange={setAlgorithmParams}
+                  />
+                ) : undefined
+              }
+            />
+          )}
+
+          {/* Validation Error Display */}
+          {validationError && (
+            <div className="mt-2 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-500 text-sm">
+              <div className="flex items-start gap-2">
+                <span className="text-red-500 flex-shrink-0">⚠️</span>
+                <span>{validationError}</span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Array Bars Visualization */}
@@ -424,7 +649,12 @@ export function VisualizerClient({ initialAlgorithm, category }: VisualizerClien
             )}
           </div>
           <div className="h-[280px] sm:h-[320px] p-2 sm:p-4">
-            <ArrayBars values={arrayState} markedIndices={markedIndices} pointers={pointers} />
+            {category === 'strings' || algorithmCategoryMap[selectedAlgorithm] === 'strings' ||
+              ['balanced-parentheses', 'infix-to-postfix', 'infix-to-prefix', 'postfix-evaluation', 'prefix-evaluation'].includes(selectedAlgorithm) ? (
+              <StringBars values={arrayState} markedIndices={markedIndices} pointers={pointers} />
+            ) : (
+              <ArrayBars values={arrayState} markedIndices={markedIndices} pointers={pointers} />
+            )}
           </div>
         </div>
 
@@ -490,20 +720,51 @@ export function VisualizerClient({ initialAlgorithm, category }: VisualizerClien
       <div className="hidden lg:block lg:col-span-3 space-y-4 order-3">
         {/* Input editor with Algorithm Parameters */}
         <div className="p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-primary)] space-y-4">
-          <ArrayInputEditor
-            value={currentInputArray}
-            onChange={handleInputChange}
-            onApply={() => handleRun()}
-            algorithmParams={
-              algorithm?.parameters && algorithm.parameters.length > 0 ? (
-                <AlgorithmParams
-                  parameters={algorithm.parameters}
-                  values={algorithmParams}
-                  onChange={setAlgorithmParams}
-                />
-              ) : undefined
-            }
-          />
+          {selectedAlgorithm === 'balanced-parentheses' ? (
+            <ParenthesesInputEditor
+              value={currentInputArray}
+              onChange={handleInputChange}
+              onApply={() => handleRun()}
+            />
+          ) : ['infix-to-postfix', 'infix-to-prefix', 'postfix-evaluation', 'prefix-evaluation'].includes(selectedAlgorithm) ? (
+            <ExpressionInputEditor
+              value={currentInputArray}
+              onChange={handleInputChange}
+              onApply={() => handleRun()}
+            />
+          ) : category === 'strings' || algorithmCategoryMap[selectedAlgorithm] === 'strings' ? (
+            <StringInputEditor
+              value={currentInputArray}
+              onChange={handleInputChange}
+              onApply={() => handleRun()}
+              algorithmParams={
+                algorithm?.parameters && algorithm.parameters.length > 0 ? (
+                  <AlgorithmParams
+                    parameters={algorithm.parameters}
+                    values={algorithmParams}
+                    onChange={setAlgorithmParams}
+                  />
+                ) : undefined
+              }
+            />
+          ) : (
+            <ArrayInputEditor
+              value={currentInputArray}
+              onChange={handleInputChange}
+              onApply={() => handleRun()}
+              algorithmId={selectedAlgorithm}
+              onParamsChange={(params) => setAlgorithmParams(prev => ({ ...prev, ...params }))}
+              algorithmParams={
+                algorithm?.parameters && algorithm.parameters.length > 0 ? (
+                  <AlgorithmParams
+                    parameters={algorithm.parameters}
+                    values={algorithmParams}
+                    onChange={setAlgorithmParams}
+                  />
+                ) : undefined
+              }
+            />
+          )}
         </div>
 
         {/* Current Operation */}
@@ -517,17 +778,35 @@ export function VisualizerClient({ initialAlgorithm, category }: VisualizerClien
           <div className="p-4 rounded-xl bg-[var(--bg-card)] border border-green-500/50">
             <h3 className="text-sm font-medium text-[var(--text-primary)] mb-2 flex items-center gap-2">
               <span className="text-green-500">✓</span>
-              {selectedAlgorithm === 'sliding-window' ? (
-                <>Maximum sum: {auxiliaryState?.countArray?.reduce((sum, item) => sum + item.count, 0) || 0} at indices [{auxiliaryState?.countArray?.[0]?.index ?? 0}..{(auxiliaryState?.countArray?.[0]?.index ?? 0) + (auxiliaryState?.countArray?.length ?? 1) - 1}]</>
-              ) : selectedAlgorithm === 'two-pointers' ? (
-                'Two Pointers Result'
-              ) : selectedAlgorithm === 'prefix-sum' && auxiliaryState?.countArray ? (
-                <>Range sum: {auxiliaryState.countArray.reduce((sum, item) => sum + item.count, 0)} at indices [{auxiliaryState.countArray[0]?.index ?? 0}..{(auxiliaryState.countArray[0]?.index ?? 0) + auxiliaryState.countArray.length - 1}]</>
-              ) : (
-                'Output Array'
-              )}
+              Result:
             </h3>
-            {(selectedAlgorithm === 'sliding-window' || selectedAlgorithm === 'prefix-sum') && auxiliaryState?.countArray ? (
+
+            {/* Display result based on type */}
+            {currentSnapshot?.result ? (
+              <div className="font-mono text-sm text-[var(--color-primary-500)] bg-[var(--bg-secondary)] rounded-lg p-2 break-all">
+                {currentSnapshot.result.type === 'string' && (
+                  <span>"{currentSnapshot.result.value as string}"</span>
+                )}
+                {currentSnapshot.result.type === 'indices' && (
+                  <span>[{(currentSnapshot.result.value as number[]).join(', ')}]</span>
+                )}
+                {currentSnapshot.result.type === 'boolean' && (
+                  <span className={currentSnapshot.result.value ? 'text-green-500' : 'text-red-500'}>
+                    {currentSnapshot.result.value ? 'TRUE ✓' : 'FALSE ✗'}
+                  </span>
+                )}
+                {currentSnapshot.result.type === 'frequency' && (
+                  <span>{currentSnapshot.result.value as string}</span>
+                )}
+                {currentSnapshot.result.type === 'search' && (
+                  <span className={typeof currentSnapshot.result.value === 'number' && currentSnapshot.result.value >= 0 ? 'text-green-500' : 'text-red-500'}>
+                    {currentSnapshot.result.label || (typeof currentSnapshot.result.value === 'number' && currentSnapshot.result.value >= 0
+                      ? `Element Found at Index ${currentSnapshot.result.value}`
+                      : 'Element Not Present')}
+                  </span>
+                )}
+              </div>
+            ) : (selectedAlgorithm === 'sliding-window' || selectedAlgorithm === 'prefix-sum') && auxiliaryState?.countArray ? (
               <>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
@@ -556,10 +835,17 @@ export function VisualizerClient({ initialAlgorithm, category }: VisualizerClien
             ) : (
               <>
                 <div className="font-mono text-sm text-[var(--color-primary-500)] bg-[var(--bg-secondary)] rounded-lg p-2 break-all">
-                  [{arrayState.join(', ')}]
+                  {category === 'strings' || algorithmCategoryMap[selectedAlgorithm] === 'strings' ? (
+                    `"${arrayState.map(code => String.fromCharCode(code)).join('')}"`
+                  ) : (
+                    `[${arrayState.join(', ')}]`
+                  )}
                 </div>
                 <p className="text-xs text-[var(--text-tertiary)] mt-2">
-                  {arrayState.length} elements
+                  {category === 'strings' || algorithmCategoryMap[selectedAlgorithm] === 'strings'
+                    ? `${arrayState.length} characters`
+                    : `${arrayState.length} elements`
+                  }
                 </p>
               </>
             )}
